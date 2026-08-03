@@ -14,7 +14,8 @@ import {
     FaNotesMedical,
     FaSave,
 } from "react-icons/fa";
-import { registerRecipient } from "../../api/addRecipient";
+import { registerRecipient } from "../../API/addRecipient";
+
 import { toast } from "react-toastify";
 
 function RecipientRegistration() {
