@@ -1,13 +1,13 @@
-import hero from "../assets/hero.jpg";
-import front from "../assets/front.jpg";
+import hero from "../assets/hero.png";
+import bgs from "../assets/bgs.jpg";
 import { useNavigate } from "react-router-dom";
 
 function Hero() {
     const navigate = useNavigate();
     return (
 
-        <section className="bg-gradient-to-r from-white-100 via-red-50 to-red-50">
-            <div className="max-w-7xl mx-auto px-8 py-20">
+        <section className="bg-gradient-to-r from-white via-red-50 to-red-50 h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${bgs})` }}>
+            < div className="max-w-7xl mx-auto px-8 py-20" >
 
                 <div className="grid lg:grid-cols-2 items-center gap-10">
                     <div>
@@ -39,15 +39,15 @@ function Hero() {
                             </button>
                         </div>
                     </div>
-                    <div className="bg-red-100 w-[700px]">
-                        <img
-                            src={front}
+                    <div className="bg-red-50 overflow-hidden shadow-lg">
+                        {/* <img
+                            src={hero}
                             alt="Hero"
-                            className=" w-full opacity-60"
-                        />
+                            className=" w-full h-full opacity-40 object-cover object-center transition-transform duration-500 transform hover:scale-105"
+                        /> */}
                     </div>
                 </div>
-            </div>
+            </div >
         </section >
     );
 }
