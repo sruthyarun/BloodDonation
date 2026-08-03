@@ -1,0 +1,249 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import {
+    FaSearch,
+    FaUser,
+    FaTint,
+    FaPhoneAlt,
+    FaMapMarkerAlt,
+    FaCalendarAlt,
+    FaEye,
+    FaCheck,
+    FaBan,
+    FaTrash,
+} from "react-icons/fa";
+
+function DonorManagementADm() {
+    const [donors] = useState([
+        {
+            id: "D001",
+            name: "Arun Kumar",
+            bloodGroup: "A+",
+            phone: "+91 9876543210",
+            city: "Kochi",
+            lastDonation: "12 Jul 2026",
+            status: "Approved",
+            eligibility: "Eligible",
+        },
+        {
+            id: "D002",
+            name: "Anjali Nair",
+            bloodGroup: "O-",
+            phone: "+91 9876543201",
+            city: "Thrissur",
+            lastDonation: "25 Jun 2026",
+            status: "Pending",
+            eligibility: "Eligible",
+        },
+        {
+            id: "D003",
+            name: "Joseph Mathew",
+            bloodGroup: "B+",
+            phone: "+91 9876543202",
+            city: "Ernakulam",
+            lastDonation: "05 May 2026",
+            status: "Blocked",
+            eligibility: "Not Eligible",
+        },
+    ]);
+
+    return (
+        <div className="min-h-screen bg-gray-100 p-8">
+
+            {/* Header */}
+
+            <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-800">
+                        Donor Management
+                    </h1>
+
+                    <p className="text-gray-500 mt-2">
+                        Manage all registered blood donors.
+                    </p>
+                </div>
+
+                <div className="flex items-center bg-white rounded-lg shadow px-4 py-3 mt-4 md:mt-0">
+                    <FaSearch className="text-gray-500" />
+
+                    <input
+                        type="text"
+                        placeholder="Search donor..."
+                        className="ml-2 outline-none"
+                    />
+                </div>
+
+            </div>
+
+            {/* Dashboard Cards */}
+
+            <div className="grid md:grid-cols-4 gap-6 mb-8">
+
+                <div className="bg-red-600 text-white rounded-xl p-6 text-center">
+                    <h2 className="text-3xl font-bold">520</h2>
+                    <p>Total Donors</p>
+                </div>
+
+                <div className="bg-green-600 text-white rounded-xl p-6 text-center">
+                    <h2 className="text-3xl font-bold">480</h2>
+                    <p>Approved</p>
+                </div>
+
+                <div className="bg-yellow-500 text-white rounded-xl p-6 text-center">
+                    <h2 className="text-3xl font-bold">25</h2>
+                    <p>Pending</p>
+                </div>
+
+                <div className="bg-red-500 text-white rounded-xl p-6 text-center">
+                    <h2 className="text-3xl font-bold">15</h2>
+                    <p>Blocked</p>
+                </div>
+
+            </div>
+
+            {/* Donor Table */}
+
+            <div className="bg-white rounded-xl shadow-lg overflow-x-auto">
+
+                <table className="w-full">
+
+                    <thead className="bg-red-600 text-white">
+                        <tr>
+                            <th className="py-4">Donor ID</th>
+                            <th>Name</th>
+                            <th>Blood Group</th>
+                            <th>Phone</th>
+                            <th>City</th>
+                            <th>Last Donation</th>
+                            <th>Eligibility</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {donors.map((donor) => (
+
+                            <tr
+                                key={donor.id}
+                                className="text-center border-b hover:bg-gray-50"
+                            >
+
+                                <td className="py-4">{donor.id}</td>
+
+                                <td>
+                                    <div className="flex justify-center items-center gap-2">
+                                        <FaUser className="text-red-600" />
+                                        {donor.name}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full">
+                                        <FaTint className="inline mr-1" />
+                                        {donor.bloodGroup}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div className="flex justify-center items-center gap-2">
+                                        <FaPhoneAlt className="text-red-600" />
+                                        {donor.phone}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div className="flex justify-center items-center gap-2">
+                                        <FaMapMarkerAlt className="text-red-600" />
+                                        {donor.city}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div className="flex justify-center items-center gap-2">
+                                        <FaCalendarAlt className="text-red-600" />
+                                        {donor.lastDonation}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span
+                                        className={`px-3 py-1 rounded-full ${donor.eligibility === "Eligible"
+                                            ? "bg-green-100 text-green-700"
+                                            : "bg-red-100 text-red-700"
+                                            }`}
+                                    >
+                                        {donor.eligibility}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span
+                                        className={`px-3 py-1 rounded-full ${donor.status === "Approved"
+                                            ? "bg-green-100 text-green-700"
+                                            : donor.status === "Pending"
+                                                ? "bg-yellow-100 text-yellow-700"
+                                                : "bg-red-100 text-red-700"
+                                            }`}
+                                    >
+                                        {donor.status}
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div className="flex justify-center gap-2">
+
+                                        <button
+                                            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
+                                            title="View"
+                                        >
+                                            <FaEye />
+                                        </button>
+
+                                        {donor.status === "Pending" && (
+                                            <button
+                                                className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg"
+                                                title="Approve"
+                                            >
+                                                <FaCheck />
+                                            </button>
+                                        )}
+
+                                        {donor.status !== "Blocked" && (
+                                            <button
+                                                className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-lg"
+                                                title="Block"
+                                            >
+                                                <FaBan />
+                                            </button>
+                                        )}
+
+                                        <button
+                                            className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg"
+                                            title="Delete"
+                                        >
+                                            <FaTrash />
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        ))}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    );
+}
+
+export default DonorManagementADm;
