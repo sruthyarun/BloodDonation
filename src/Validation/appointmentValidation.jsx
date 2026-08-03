@@ -1,4 +1,4 @@
-export const validateAppointment = (formData) => {
+export default function validateAppointment(formData) {
     const errors = {};
 
     // Donor Name

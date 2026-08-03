@@ -15,8 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/userSlice";
 import DonorPanel from "../../components/donorPanel";
 import { bookAppointment } from "../../API/addAppointment";
-import { validateAppointment } from "../../validation/appointmentValidation";
-
+import validateAppointment from "../../Validation/donorValidation";
 
 
 function BookAppointment() {
