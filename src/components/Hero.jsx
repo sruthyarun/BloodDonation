@@ -6,8 +6,8 @@ function Hero() {
     const navigate = useNavigate();
     return (
 
-        <section className="bg-gradient-to-r from-white via-red-50 to-red-50 h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${bgs})` }}>
-            < div className="max-w-7xl mx-auto px-8 py-20" >
+        <section className="bg-gradient-to-r from-red-700 via-white to-red-400  h-screen bg-cover bg-center bg-no-repeat " style={{ backgroundImage: `url(${bgs})` }}>
+            < div className="max-w-7xl mx-auto px-8 py-20 opacity-70" >
 
                 <div className="grid lg:grid-cols-2 items-center gap-10">
                     <div>
