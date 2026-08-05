@@ -67,7 +67,7 @@ function Login() {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/${endpoint}`
+                `https://blood-donation-backend-olwl.onrender.com/${endpoint}`
             );
 
             if (!response.ok) {

@@ -35,7 +35,7 @@ function BloodInventory() {
     const fetchInventory = async () => {
         try {
             const response = await fetch(
-                `http://localhost:5000/bloodInventory?hospitalEmail=${user.email}`
+                `https://blood-donation-backend-olwl.onrender.com/bloodInventory?hospitalEmail=${user.email}`
             );
 
             const data = await response.json();
@@ -91,7 +91,7 @@ function BloodInventory() {
             if (editId) {
 
                 await fetch(
-                    `http://localhost:5000/bloodInventory/${editId}`,
+                    `https://blood-donation-backend-olwl.onrender.com/bloodInventory/${editId}`,
                     {
                         method: "PATCH",
                         headers: {
@@ -106,7 +106,7 @@ function BloodInventory() {
             } else {
 
                 await fetch(
-                    "http://localhost:5000/bloodInventory",
+                    "https://blood-donation-backend-olwl.onrender.com/bloodInventory",
                     {
                         method: "POST",
                         headers: {
@@ -139,7 +139,7 @@ function BloodInventory() {
         try {
 
             await fetch(
-                `http://localhost:5000/bloodInventory/${id}`,
+                `https://blood-donation-backend-olwl.onrender.com/bloodInventory/${id}`,
                 {
                     method: "DELETE",
                 }

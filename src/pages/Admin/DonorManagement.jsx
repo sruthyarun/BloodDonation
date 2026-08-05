@@ -26,7 +26,7 @@ function DonorManagementADm() {
     const fetchDonors = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:5000/donors"
+                "https://blood-donation-backend-olwl.onrender.com/donors"
             );
 
             setDonors(response.data);
@@ -70,7 +70,7 @@ function DonorManagementADm() {
             const donor = donors.find((d) => d.id === id);
 
             await axios.put(
-                `http://localhost:5000/donors/${id}`,
+                `https://blood-donation-backend-olwl.onrender.com/donors/${id}`,
                 {
                     ...donor,
                     status,

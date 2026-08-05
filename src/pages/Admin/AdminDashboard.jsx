@@ -36,11 +36,11 @@ function AdminDashboard() {
                 appointmentRes,
                 requestRes,
             ] = await Promise.all([
-                axios.get("http://localhost:5000/donors"),
-                axios.get("http://localhost:5000/recipients"),
-                axios.get("http://localhost:5000/hospitals"),
-                axios.get("http://localhost:5000/appointments"),
-                axios.get("http://localhost:5000/bloodRequests"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/donors"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/recipients"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/hospitals"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/appointments"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/bloodRequests"),
             ]);
 
             setDonors(donorRes.data);

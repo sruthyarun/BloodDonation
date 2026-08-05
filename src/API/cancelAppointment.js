@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/appointments";
+const API_URL = "https://blood-donation-backend-olwl.onrender.com/appointments";
 
 export const cancelAppointment = async (id) => {
     const response = await fetch(`${API_URL}/${id}`, {

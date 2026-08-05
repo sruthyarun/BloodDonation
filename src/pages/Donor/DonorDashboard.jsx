@@ -24,7 +24,7 @@ function DonorDashboard() {
     const [appointments, setAppointments] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:5000/appointments")
+        fetch("https://blood-donation-backend-olwl.onrender.com/appointments")
             .then((res) => res.json())
             .then((data) => setAppointments(data))
             .catch((err) => console.log(err));
@@ -66,7 +66,7 @@ function DonorDashboard() {
     const [emergencyRequestss, setEmergencyRequestss] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:5000/emergencyRequests")
+        fetch("https://blood-donation-backend-olwl.onrender.com/emergencyRequests")
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);

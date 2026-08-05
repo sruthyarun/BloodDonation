@@ -14,7 +14,7 @@ import {
 
 import AdminPanel from "../../components/AdminPanel";
 
-const API_URL = "http://localhost:5000/bloodBanks";
+const API_URL = "https://blood-donation-backend-olwl.onrender.com/bloodBanks";
 
 function BBManagementADm() {
     const [bbanks, setbbanks] = useState([]);

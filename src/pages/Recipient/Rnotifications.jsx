@@ -25,7 +25,7 @@ function Rnotifications() {
     const fetchNotifications = async () => {
         try {
             const response = await fetch(
-                `http://localhost:5000/notifications?email=${user.email}`
+                `https://blood-donation-backend-olwl.onrender.com/notifications?email=${user.email}`
             );
 
             const data = await response.json();
@@ -39,7 +39,7 @@ function Rnotifications() {
         try {
             const notification = notifications.find((item) => item.id === id);
 
-            await fetch(`http://localhost:5000/notifications/${id}`, {
+            await fetch(`https://blood-donation-backend-olwl.onrender.com/notifications/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -61,7 +61,7 @@ function Rnotifications() {
 
     const deleteNotification = async (id) => {
         try {
-            await fetch(`http://localhost:5000/notifications/${id}`, {
+            await fetch(`https://blood-donation-backend-olwl.onrender.com/notifications/${id}`, {
                 method: "DELETE",
             });
 

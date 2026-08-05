@@ -112,7 +112,7 @@ function ProfileHS() {
             };
 
             await axios.put(
-                `http://localhost:5000/hospitals/${user.id}`,
+                `https://blood-donation-backend-olwl.onrender.com/hospitals/${user.id}`,
                 updatedHospital
             );
 

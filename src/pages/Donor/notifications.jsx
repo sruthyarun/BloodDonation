@@ -20,7 +20,7 @@ function Notifications() {
         const loadNotifications = async () => {
             try {
                 const response = await fetch(
-                    "http://localhost:5000/notifications"
+                    "https://blood-donation-backend-olwl.onrender.com/notifications"
                 );
 
                 if (!response.ok) {

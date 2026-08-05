@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/bloodRequests";
+const API_URL = "https://blood-donation-backend-olwl.onrender.com/bloodRequests";
 
 export const bloodRequest = async (requestData) => {
     const response = await fetch(API_URL, {

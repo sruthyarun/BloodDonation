@@ -32,21 +32,21 @@ function RecipientDashboard() {
 
 
         fetch(
-            `http://localhost:5000/bloodRequests?email=${user.email}`
+            `https://blood-donation-backend-olwl.onrender.com/bloodRequests?email=${user.email}`
         )
             .then(res => res.json())
             .then(data => setRequests(data));
 
 
         fetch(
-            "http://localhost:5000/hospitals"
+            "https://blood-donation-backend-olwl.onrender.com/hospitals"
         )
             .then(res => res.json())
             .then(data => setHospitals(data));
 
 
         fetch(
-            "http://localhost:5000/bloodInventory"
+            "https://blood-donation-backend-olwl.onrender.com/bloodInventory"
         )
             .then(res => res.json())
             .then(data => setInventory(data));

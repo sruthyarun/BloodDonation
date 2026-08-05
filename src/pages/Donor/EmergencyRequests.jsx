@@ -32,7 +32,7 @@ function DonorEmergencyRequests() {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/emergencyRequests"
+                "https://blood-donation-backend-olwl.onrender.com/emergencyRequests"
             );
 
 

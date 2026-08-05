@@ -42,7 +42,7 @@ function DonorManagement() {
         try {
 
             const response = await fetch(
-                `http://localhost:5000/appointments?hospital=${encodeURIComponent(
+                `https://blood-donation-backend-olwl.onrender.com/appointments?hospital=${encodeURIComponent(
                     user.hospitalName
                 )}`
             );
@@ -88,7 +88,7 @@ function DonorManagement() {
 
 
             await fetch(
-                `http://localhost:5000/appointments/${appointment.id}`,
+                `https://blood-donation-backend-olwl.onrender.com/appointments/${appointment.id}`,
                 {
 
                     method: "PATCH",
@@ -110,7 +110,7 @@ function DonorManagement() {
             // notification to donor
 
             await fetch(
-                "http://localhost:5000/notifications",
+                "https://blood-donation-backend-olwl.onrender.com/notifications",
                 {
 
                     method: "POST",

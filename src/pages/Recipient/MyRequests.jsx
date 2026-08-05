@@ -41,7 +41,7 @@ function MyRequests() {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/bloodRequests"
+                "https://blood-donation-backend-olwl.onrender.com/bloodRequests"
             );
 
             const data = await response.json();
@@ -82,7 +82,7 @@ function MyRequests() {
         try {
 
             await fetch(
-                `http://localhost:5000/bloodRequests/${id}`,
+                `https://blood-donation-backend-olwl.onrender.com/bloodRequests/${id}`,
                 {
                     method: "DELETE",
                 }

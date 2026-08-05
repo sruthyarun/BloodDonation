@@ -49,25 +49,25 @@ function BloodBankDashboard() {
 
             const inventoryRes =
                 await fetch(
-                    `http://localhost:5000/bloodInventory?bank=${user.email}`
+                    `https://blood-donation-backend-olwl.onrender.com/bloodInventory?bank=${user.email}`
                 );
 
 
             const requestRes =
                 await fetch(
-                    `http://localhost:5000/bloodRequests?hospital=${user.bankName}`
+                    `https://blood-donation-backend-olwl.onrender.com/bloodRequests?hospital=${user.bankName}`
                 );
 
 
             const emergencyRes =
                 await fetch(
-                    `http://localhost:5000/emergencyRequests`
+                    `https://blood-donation-backend-olwl.onrender.com/emergencyRequests`
                 );
 
 
             const appointmentRes =
                 await fetch(
-                    `http://localhost:5000/appointments?hospital=${user.bankName}`
+                    `https://blood-donation-backend-olwl.onrender.com/appointments?hospital=${user.bankName}`
                 );
 
 

@@ -53,7 +53,7 @@ function BloodRequests() {
             const response =
                 await fetch(
 
-                    `http://localhost:5000/bloodRequests?hospital=${encodeURIComponent(
+                    `https://blood-donation-backend-olwl.onrender.com/bloodRequests?hospital=${encodeURIComponent(
                         user.hospitalName
                     )}`
 
@@ -93,7 +93,7 @@ function BloodRequests() {
 
             await fetch(
 
-                `http://localhost:5000/bloodRequests/${request.id}`,
+                `https://blood-donation-backend-olwl.onrender.com/bloodRequests/${request.id}`,
 
                 {
 
@@ -115,7 +115,7 @@ function BloodRequests() {
 
             await fetch(
 
-                "http://localhost:5000/notifications",
+                "https://blood-donation-backend-olwl.onrender.com/notifications",
 
                 {
 

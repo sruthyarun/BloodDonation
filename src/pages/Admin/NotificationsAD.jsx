@@ -16,7 +16,7 @@ function NotificationsADm() {
     const [notifications, setNotifications] = useState([]);
     const [search, setSearch] = useState("");
 
-    const API_URL = "http://localhost:5000/notifications";
+    const API_URL = "https://blood-donation-backend-olwl.onrender.com/notifications";
 
     useEffect(() => {
         fetchNotifications();

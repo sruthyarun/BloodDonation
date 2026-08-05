@@ -39,14 +39,14 @@ function Reports() {
                 appointmentRes,
                 emergencyRes,
             ] = await Promise.all([
-                axios.get("http://localhost:5000/donors"),
-                axios.get("http://localhost:5000/recipients"),
-                axios.get("http://localhost:5000/hospitals"),
-                axios.get("http://localhost:5000/bloodBanks"),
-                axios.get("http://localhost:5000/bloodInventory"),
-                axios.get("http://localhost:5000/bloodRequests"),
-                axios.get("http://localhost:5000/appointments"),
-                axios.get("http://localhost:5000/emergencyRequests"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/donors"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/recipients"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/hospitals"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/bloodBanks"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/bloodInventory"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/bloodRequests"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/appointments"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/emergencyRequests"),
             ]);
 
             setDonors(donorRes.data);

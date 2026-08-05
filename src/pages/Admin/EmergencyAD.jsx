@@ -27,7 +27,7 @@ function AdminEmergencyRequests() {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/emergencyRequests"
+                "https://blood-donation-backend-olwl.onrender.com/emergencyRequests"
             );
 
             const data = await response.json();
@@ -52,7 +52,7 @@ function AdminEmergencyRequests() {
             // Update emergency request status
 
             await fetch(
-                `http://localhost:5000/emergencyRequests/${request.id}`,
+                `https://blood-donation-backend-olwl.onrender.com/emergencyRequests/${request.id}`,
                 {
 
                     method: "PATCH",
@@ -97,7 +97,7 @@ function AdminEmergencyRequests() {
 
 
                 await fetch(
-                    "http://localhost:5000/notifications",
+                    "https://blood-donation-backend-olwl.onrender.com/notifications",
                     {
 
                         method: "POST",
@@ -151,9 +151,6 @@ function AdminEmergencyRequests() {
                 <p className="text-gray-500 mb-8">
                     Manage urgent blood requests from hospitals and recipients
                 </p>
-
-
-
 
                 <div className="space-y-6">
 

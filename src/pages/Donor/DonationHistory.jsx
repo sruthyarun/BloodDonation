@@ -18,7 +18,7 @@ function DonationHistory() {
     useEffect(() => {
         if (!user) return;
 
-        fetch("http://localhost:5000/appointments")
+        fetch("https://blood-donation-backend-olwl.onrender.com/appointments")
             .then((res) => res.json())
             .then((data) => {
                 console.log("Logged User:", user);

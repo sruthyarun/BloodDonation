@@ -42,7 +42,7 @@ function BookAppointment() {
     useEffect(() => {
         const fetchHospitals = async () => {
             try {
-                const response = await fetch("http://localhost:5000/hospitals");
+                const response = await fetch("https://blood-donation-backend-olwl.onrender.com/hospitals");
                 const data = await response.json();
                 setHospitals(data);
             } catch (error) {

@@ -21,7 +21,7 @@ function HospitalDashboard() {
     useEffect(() => {
         axios
             .get(
-                `http://localhost:5000/notifications?email=${user.email}&read=false`
+                `https://blood-donation-backend-olwl.onrender.com/notifications?email=${user.email}&read=false`
             )
             .then((res) => setNotifications(res.data))
             .catch((err) => console.log(err));

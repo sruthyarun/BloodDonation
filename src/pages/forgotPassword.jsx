@@ -21,7 +21,7 @@ function ForgotPassword() {
 
         for (let role of roles) {
             const response = await fetch(
-                `http://localhost:5000/${role}?email=${email}`
+                `https://blood-donation-backend-olwl.onrender.com/${role}?email=${email}`
             );
             const data = await response.json();
 

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/donors";
+const API_URL = "https://blood-donation-backend-olwl.onrender.com/donors";
 
 export const updateProfile = async (id, userData) => {
     const response = await fetch(`${API_URL}/${id}`, {

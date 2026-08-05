@@ -23,7 +23,7 @@ function BloodRequestsADm() {
 
     const fetchRequests = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/bloodRequests");
+            const res = await axios.get("https://blood-donation-backend-olwl.onrender.com/bloodRequests");
             setRequests(res.data);
         } catch (error) {
             console.error(error);
@@ -65,7 +65,7 @@ function BloodRequestsADm() {
     const deleteRequest = async (id) => {
         if (!window.confirm("Delete this request?")) return;
 
-        await axios.delete(`http://localhost:5000/bloodRequests/${id}`);
+        await axios.delete(`https://blood-donation-backend-olwl.onrender.com/bloodRequests/${id}`);
 
         fetchRequests();
     };
@@ -73,7 +73,7 @@ function BloodRequestsADm() {
         const request = requests.find((r) => r.id === id);
 
         await axios.put(
-            `http://localhost:5000/bloodRequests/${id}`,
+            `https://blood-donation-backend-olwl.onrender.com/bloodRequests/${id}`,
             {
                 ...request,
                 status,
@@ -82,17 +82,11 @@ function BloodRequestsADm() {
 
         fetchRequests();
     };
-    // if (loading) {
-    //     return (
-    //         <div className="min-h-screen flex items-center justify-center text-xl">
-    //             Loading...
-    //         </div>
-    //     );
-    // }
+
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* Sidebar */}
+
 
             <AdminPanel />
             <div className="min-h-screen bg-gray-100 p-8 flex-1">

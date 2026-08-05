@@ -24,7 +24,7 @@ function AppointmentManagementADm() {
     const fetchAppointments = async () => {
         try {
             const res = await axios.get(
-                "http://localhost:5000/appointments"
+                "https://blood-donation-backend-olwl.onrender.com/appointments"
             );
             setAppointments(res.data);
         } catch (error) {
@@ -63,7 +63,7 @@ function AppointmentManagementADm() {
         const appointment = appointments.find((a) => a.id === id);
 
         await axios.put(
-            `http://localhost:5000/appointments/${id}`,
+            `https://blood-donation-backend-olwl.onrender.com/appointments/${id}`,
             {
                 ...appointment,
                 status,
@@ -76,7 +76,7 @@ function AppointmentManagementADm() {
         if (!window.confirm("Delete this appointment?")) return;
 
         await axios.delete(
-            `http://localhost:5000/appointments/${id}`
+            `https://blood-donation-backend-olwl.onrender.com/appointments/${id}`
         );
 
         fetchAppointments();

@@ -31,7 +31,7 @@ function ViewEmergencyRequests() {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/emergencyRequests"
+                "https://blood-donation-backend-olwl.onrender.com/emergencyRequests"
             );
 
             const data = await response.json();
@@ -60,7 +60,7 @@ function ViewEmergencyRequests() {
         try {
 
             await fetch(
-                `http://localhost:5000/emergencyRequests/${id}`,
+                `https://blood-donation-backend-olwl.onrender.com/emergencyRequests/${id}`,
                 {
                     method: "DELETE",
                 }

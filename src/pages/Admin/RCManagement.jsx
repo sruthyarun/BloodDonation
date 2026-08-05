@@ -21,7 +21,7 @@ function RecipientManagementADm() {
 
     const fetchRecipients = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/recipients");
+            const res = await axios.get("https://blood-donation-backend-olwl.onrender.com/recipients");
             setRecipients(res.data);
         } catch (err) {
             console.log(err);
@@ -33,7 +33,7 @@ function RecipientManagementADm() {
             const recipient = recipients.find((r) => r.id === id);
 
             await axios.put(
-                `http://localhost:5000/recipients/${id}`,
+                `https://blood-donation-backend-olwl.onrender.com/recipients/${id}`,
                 {
                     ...recipient,
                     status,
@@ -51,7 +51,7 @@ function RecipientManagementADm() {
 
         try {
             await axios.delete(
-                `http://localhost:5000/recipients/${id}`
+                `https://blood-donation-backend-olwl.onrender.com/recipients/${id}`
             );
 
             fetchRecipients();

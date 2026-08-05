@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/hospitals";
+const API_URL = "https://blood-donation-backend-olwl.onrender.com/hospitals";
 
 export const registerHospital = async (hospitalData) => {
 

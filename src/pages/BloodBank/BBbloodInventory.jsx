@@ -40,7 +40,7 @@ function BBBloodInventory() {
         try {
 
             const response = await fetch(
-                `http://localhost:5000/bloodInventory?bloodBankEmail=${user.email}`
+                `https://blood-donation-backend-olwl.onrender.com/bloodInventory?bloodBankEmail=${user.email}`
             );
 
             const data = await response.json();
@@ -120,7 +120,7 @@ function BBBloodInventory() {
             if (editId) {
 
                 await fetch(
-                    `http://localhost:5000/bloodInventory/${editId}`,
+                    `https://blood-donation-backend-olwl.onrender.com/bloodInventory/${editId}`,
                     {
                         method: "PATCH",
                         headers: {
@@ -136,7 +136,7 @@ function BBBloodInventory() {
             } else {
 
                 await fetch(
-                    "http://localhost:5000/bloodInventory",
+                    "https://blood-donation-backend-olwl.onrender.com/bloodInventory",
                     {
                         method: "POST",
                         headers: {
@@ -178,7 +178,7 @@ function BBBloodInventory() {
         try {
 
             await fetch(
-                `http://localhost:5000/bloodInventory/${id}`,
+                `https://blood-donation-backend-olwl.onrender.com/bloodInventory/${id}`,
                 {
                     method: "DELETE",
                 }

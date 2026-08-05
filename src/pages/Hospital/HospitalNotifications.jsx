@@ -18,7 +18,7 @@ function HospitalNotification() {
     useEffect(() => {
         if (!user) return;
 
-        fetch(`http://localhost:5000/notifications?email=${user.email}`)
+        fetch(`https://blood-donation-backend-olwl.onrender.com/notifications?email=${user.email}`)
             .then((res) => res.json())
             .then((data) => setNotifications(data))
             .catch((err) => console.error(err));
@@ -27,7 +27,7 @@ function HospitalNotification() {
     // Mark notification as read
     const markAsRead = async (id) => {
         try {
-            await fetch(`http://localhost:5000/notifications/${id}`, {
+            await fetch(`https://blood-donation-backend-olwl.onrender.com/notifications/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

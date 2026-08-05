@@ -8,7 +8,7 @@ export const currentUser = async () => {
         if (!loggedUser) return;
 
         const response = await fetch(
-            `http://localhost:5000/donors/${loggedUser.id}`
+            `https://blood-donation-backend-olwl.onrender.com/donors/${loggedUser.id}`
         );
 
         const data = await response.json();
