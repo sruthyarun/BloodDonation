@@ -44,7 +44,6 @@ import AdminDashboard from "./pages/Admin/AdminDashboard";
 import DonorManagementADm from "./pages/Admin/DonorManagement";
 import RecipientManagementADm from "./pages/Admin/RCManagement";
 import HospitalManagementADm from "./pages/Admin/HpManagement";
-import BloodInventoryADm from "./pages/Admin/BloodInventoryAD";
 import BloodRequestsADm from "./pages/Admin/BloodRequestsAD";
 import AppointmentManagementADm from "./pages/Admin/AppoiMngmtAD";
 import EmergencyRequestsADm from "./pages/Admin/EmergencyAD";
@@ -52,6 +51,7 @@ import NotificationsADm from "./pages/Admin/NotificationsAD";
 import Reports from "./pages/Admin/Reports";
 import UserManagement from "./pages/Admin/UserManagement";
 import AdminProfile from "./pages/Admin/AdminProfile";
+
 
 // Blood Bank
 import BloodBankRegistration from "./pages/BloodBank/BBRegistration";
@@ -79,6 +79,7 @@ import HospitalEmergencyRequest from "./pages/Hospital/Emergency";
 import ViewEmergencyRequests from "./pages/Hospital/EmergencyRequests";
 import RecipientEmergencyRequest from "./pages/Recipient/EmergencyRequests";
 import AdminEmergencyRequests from "./pages/Admin/EmergencyAD";
+import BloodStockManagementADm from "./pages/Admin/bloodStockManagement";
 
 
 
@@ -126,9 +127,6 @@ const router = createBrowserRouter([
   {
     path: "/bloodbank-managementAD", element: <BBManagementADm />
   },
-  {
-    path: "/blood-inventoryAD", element: <BloodInventoryADm />
-  },
   { path: "/blood-requestsAD", element: <BloodRequestsADm /> },
   { path: "/appointment-managementAD", element: <AppointmentManagementADm /> },
   {
@@ -138,6 +136,9 @@ const router = createBrowserRouter([
   { path: "/reports", element: <Reports /> },
   { path: "/user-management", element: <UserManagement /> },
   { path: "/admin-profile", element: <AdminProfile /> },
+  {
+    path: "/blood-stock-managementAD", element: <BloodStockManagementADm />
+  },
 
   // Blood Bank
   { path: "/register/bloodbanks", element: <BloodBankRegistration /> },

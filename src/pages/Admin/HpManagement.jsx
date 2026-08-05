@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import {
     FaSearch,
@@ -10,35 +10,110 @@ import {
     FaCheck,
     FaTimes,
     FaBuilding,
+    FaBan,
+    FaEnvelope,
+    FaTimesCircle,
 } from "react-icons/fa";
 
 import AdminPanel from "../../components/AdminPanel";
 
-const API_URL = "https://blood-donation-backend-olwl.onrender.com/hospitals";
+const API_URL =
+    "https://blood-donation-backend-olwl.onrender.com/hospitals";
 
 function HospitalManagementADm() {
     const [hospitals, setHospitals] = useState([]);
     const [search, setSearch] = useState("");
+    const [selectedHospital, setSelectedHospital] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    // ==============================
+    // FETCH HOSPITALS
+    // ==============================
+
     useEffect(() => {
         fetchHospitals();
     }, []);
 
     const fetchHospitals = async () => {
         try {
+            setLoading(true);
+
             const response = await axios.get(API_URL);
+
             setHospitals(response.data);
         } catch (error) {
-            console.log(error);
+            console.log("Error fetching hospitals:", error);
+        } finally {
+            setLoading(false);
         }
     };
-    const filteredHospitals = hospitals.filter((hospital) =>
-        hospital.hospitalName
-            ?.toLowerCase()
-            .includes(search.toLowerCase())
-    );
+
+    // ==============================
+    // SEARCH
+    // ==============================
+
+    const filteredHospitals = useMemo(() => {
+        const searchValue = search.toLowerCase().trim();
+
+        return hospitals.filter(
+            (hospital) =>
+                hospital.hospitalName
+                    ?.toLowerCase()
+                    .includes(searchValue) ||
+                hospital.email
+                    ?.toLowerCase()
+                    .includes(searchValue) ||
+                hospital.phone
+                    ?.toLowerCase()
+                    .includes(searchValue) ||
+                hospital.hospitalType
+                    ?.toLowerCase()
+                    .includes(searchValue) ||
+                hospital.city
+                    ?.toLowerCase()
+                    .includes(searchValue) ||
+                hospital.district
+                    ?.toLowerCase()
+                    .includes(searchValue) ||
+                hospital.registrationNumber
+                    ?.toLowerCase()
+                    .includes(searchValue)
+        );
+    }, [hospitals, search]);
+
+    // ==============================
+    // STATISTICS
+    // ==============================
+
+    const totalHospitals = hospitals.length;
+
+    const approvedCount = hospitals.filter(
+        (hospital) => hospital.status === "Approved"
+    ).length;
+
+    const pendingCount = hospitals.filter(
+        (hospital) => hospital.status === "Pending"
+    ).length;
+
+    const rejectedCount = hospitals.filter(
+        (hospital) => hospital.status === "Rejected"
+    ).length;
+
+    const blockedCount = hospitals.filter(
+        (hospital) => hospital.status === "Blocked"
+    ).length;
+
+    // ==============================
+    // UPDATE STATUS
+    // ==============================
+
     const updateStatus = async (id, status) => {
         try {
-            const hospital = hospitals.find((h) => h.id === id);
+            const hospital = hospitals.find(
+                (item) => item.id === id
+            );
+
+            if (!hospital) return;
 
             await axios.put(`${API_URL}/${id}`, {
                 ...hospital,
@@ -46,28 +121,68 @@ function HospitalManagementADm() {
             });
 
             fetchHospitals();
+
+            if (selectedHospital?.id === id) {
+                setSelectedHospital({
+                    ...hospital,
+                    status,
+                });
+            }
         } catch (error) {
-            console.log(error);
+            console.log("Error updating hospital:", error);
         }
     };
+
+    // ==============================
+    // DELETE HOSPITAL
+    // ==============================
+
     const deleteHospital = async (id) => {
-        if (!window.confirm("Delete this hospital?")) return;
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this hospital?"
+        );
+
+        if (!confirmDelete) return;
 
         try {
             await axios.delete(`${API_URL}/${id}`);
+
             fetchHospitals();
+
+            if (selectedHospital?.id === id) {
+                setSelectedHospital(null);
+            }
         } catch (error) {
-            console.log(error);
+            console.log("Error deleting hospital:", error);
         }
     };
+
+    // ==============================
+    // VIEW PROFILE
+    // ==============================
+
+    const viewHospital = (hospital) => {
+        setSelectedHospital(hospital);
+    };
+
+    // ==============================
+    // STATUS STYLE
+    // ==============================
+
     const getStatusColor = (status) => {
         switch (status) {
             case "Approved":
                 return "bg-green-100 text-green-700";
+
             case "Pending":
                 return "bg-yellow-100 text-yellow-700";
+
             case "Rejected":
                 return "bg-red-100 text-red-700";
+
+            case "Blocked":
+                return "bg-gray-200 text-gray-700";
+
             default:
                 return "bg-gray-100 text-gray-700";
         }
@@ -76,190 +191,705 @@ function HospitalManagementADm() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* Sidebar */}
+            {/* ==============================
+                ADMIN SIDEBAR
+            ============================== */}
 
             <AdminPanel />
+
             <div className="min-h-screen bg-gray-100 p-8 flex-1">
 
-                {/* Header */}
+                {/* ==============================
+                    HEADER
+                ============================== */}
+
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8">
 
                     <div>
                         <h1 className="text-3xl font-bold text-gray-800">
                             Hospital Management
                         </h1>
+
                         <p className="text-gray-500 mt-2">
-                            Manage registered hospitals.
+                            Manage registered hospitals and
+                            registration requests.
                         </p>
                     </div>
 
-                    <div className="flex items-center bg-white shadow rounded-lg px-4 py-3 mt-4 md:mt-0">
+                    {/* Search */}
+
+                    <div className="flex items-center bg-white shadow rounded-lg px-4 py-3 mt-4 md:mt-0 w-full md:w-80">
+
                         <FaSearch className="text-gray-500" />
+
                         <input
                             type="text"
                             placeholder="Search hospital..."
                             value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className="ml-2 outline-none w-64"
+                            onChange={(e) =>
+                                setSearch(e.target.value)
+                            }
+                            className="ml-2 outline-none w-full"
                         />
+
                     </div>
 
                 </div>
 
-                {/* Summary Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {/* ==============================
+                    SUMMARY CARDS
+                ============================== */}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
+
+                    {/* Total */}
 
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-600">
-                        <h2 className="text-gray-500">Total Hospitals</h2>
+
+                        <h2 className="text-gray-500">
+                            Total Hospitals
+                        </h2>
+
                         <p className="text-4xl font-bold text-red-600 mt-2">
-                            {hospitals.length}
+                            {totalHospitals}
                         </p>
+
                     </div>
+
+                    {/* Approved */}
 
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-600">
-                        <h2 className="text-gray-500">Approved</h2>
+
+                        <h2 className="text-gray-500">
+                            Approved
+                        </h2>
+
                         <p className="text-4xl font-bold text-green-600 mt-2">
-                            {hospitals.filter(h => h.status === "Approved").length}
+                            {approvedCount}
                         </p>
+
                     </div>
+
+                    {/* Pending */}
 
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
-                        <h2 className="text-gray-500">Pending</h2>
+
+                        <h2 className="text-gray-500">
+                            Pending
+                        </h2>
+
                         <p className="text-4xl font-bold text-yellow-600 mt-2">
-                            {hospitals.filter(h => h.status === "Pending").length}
+                            {pendingCount}
                         </p>
+
                     </div>
 
+                    {/* Rejected */}
+
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
-                        <h2 className="text-gray-500">Rejected</h2>
+
+                        <h2 className="text-gray-500">
+                            Rejected
+                        </h2>
+
                         <p className="text-4xl font-bold text-red-500 mt-2">
-                            {hospitals.filter(h => h.status === "Rejected").length}
+                            {rejectedCount}
                         </p>
+
+                    </div>
+
+                    {/* Blocked */}
+
+                    <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-gray-600">
+
+                        <h2 className="text-gray-500">
+                            Blocked
+                        </h2>
+
+                        <p className="text-4xl font-bold text-gray-600 mt-2">
+                            {blockedCount}
+                        </p>
+
                     </div>
 
                 </div>
 
-                {/* Hospital Table */}
-                <div className="bg-white rounded-xl shadow-lg overflow-x-auto">
+                {/* ==============================
+                    HOSPITAL LIST
+                    DIV FORMAT - NO TABLE
+                ============================== */}
 
-                    <table className="w-full">
+                <div className="space-y-4">
 
-                        <thead className="bg-red-600 text-white">
-                            <tr>
-                                <th className="py-4">Hospital ID</th>
-                                <th>Hospital Name</th>
-                                <th>Type</th>
-                                <th>City</th>
-                                <th>Phone</th>
-                                <th>License No.</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                    {loading ? (
 
-                        <tbody>
+                        <div className="bg-white rounded-xl shadow p-10 text-center">
 
-                            {filteredHospitals.map((hospital) => (
-                                <tr
-                                    key={hospital.id}
-                                    className="text-center border-b hover:bg-gray-50"
-                                >
+                            <p className="text-gray-500">
+                                Loading hospitals...
+                            </p>
 
-                                    <td className="py-4 font-semibold">
-                                        {hospital.id}
-                                    </td>
+                        </div>
 
-                                    <td>
-                                        <div className="flex justify-center items-center gap-2">
-                                            <FaHospital className="text-red-600" />
-                                            {hospital.hospitalName}
+                    ) : filteredHospitals.length === 0 ? (
+
+                        <div className="bg-white rounded-xl shadow p-10 text-center">
+
+                            <FaHospital className="mx-auto text-gray-300 text-5xl mb-3" />
+
+                            <p className="text-gray-500">
+                                No hospitals found.
+                            </p>
+
+                        </div>
+
+                    ) : (
+
+                        filteredHospitals.map((hospital) => (
+
+                            <div
+                                key={hospital.id}
+                                className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5"
+                            >
+
+                                <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
+
+                                    {/* ==============================
+                                        HOSPITAL INFORMATION
+                                    ============================== */}
+
+                                    <div className="flex items-center gap-4 flex-1">
+
+                                        <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+
+                                            <FaHospital className="text-red-600 text-2xl" />
+
                                         </div>
-                                    </td>
 
-                                    <td>
-                                        <div className="flex justify-center items-center gap-2">
-                                            <FaBuilding className="text-red-600" />
-                                            {hospital.hospitalType}
+                                        <div>
+
+                                            <h2 className="text-lg font-bold text-gray-800">
+
+                                                {hospital.hospitalName ||
+                                                    "Unknown Hospital"}
+
+                                            </h2>
+
+                                            <p className="text-sm text-gray-500">
+
+                                                Hospital ID:{" "}
+                                                {hospital.id}
+
+                                            </p>
+
+                                            <p className="text-sm text-gray-500">
+
+                                                {hospital.email ||
+                                                    "No email"}
+
+                                            </p>
+
+                                            <div className="flex flex-wrap gap-3 mt-2 text-sm">
+
+                                                <span className="flex items-center gap-1">
+
+                                                    <FaPhoneAlt className="text-red-600" />
+
+                                                    {hospital.phone ||
+                                                        "N/A"}
+
+                                                </span>
+
+                                                <span className="flex items-center gap-1">
+
+                                                    <FaMapMarkerAlt className="text-red-600" />
+
+                                                    {hospital.city ||
+                                                        hospital.district ||
+                                                        "N/A"}
+
+                                                </span>
+
+                                            </div>
+
                                         </div>
-                                    </td>
 
-                                    <td>
-                                        <div className="flex justify-center items-center gap-2">
-                                            <FaMapMarkerAlt className="text-red-600" />
-                                            {hospital.district}
-                                        </div>
-                                    </td>
+                                    </div>
 
-                                    <td>
-                                        <div className="flex justify-center items-center gap-2">
-                                            <FaPhoneAlt className="text-red-600" />
-                                            {hospital.phone}
-                                        </div>
-                                    </td>
+                                    {/* ==============================
+                                        HOSPITAL TYPE / LICENSE
+                                    ============================== */}
 
-                                    <td>
-                                        {hospital.registrationNumber}
-                                    </td>
+                                    <div className="flex flex-wrap gap-3">
 
-                                    <td>
-                                        <span
-                                            className={`px-3 py-1 rounded-full font-medium ${hospital.status === "Approved"
-                                                ? "bg-green-100 text-green-700"
-                                                : hospital.status === "Pending"
-                                                    ? "bg-yellow-100 text-yellow-700"
-                                                    : "bg-red-100 text-red-700"
-                                                }`}
-                                        >
-                                            {hospital.status}
+                                        <span className="bg-red-100 text-red-600 px-4 py-2 rounded-full font-semibold">
+
+                                            <FaBuilding className="inline mr-1" />
+
+                                            {hospital.hospitalType ||
+                                                "Hospital"}
+
                                         </span>
-                                    </td>
 
-                                    <td>
-                                        <div className="flex justify-center gap-2">
+                                        <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-semibold">
 
-                                            <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded">
+                                            License:{" "}
+                                            {hospital.registrationNumber ||
+                                                "N/A"}
+
+                                        </span>
+
+                                        <span
+                                            className={`px-4 py-2 rounded-full font-semibold ${getStatusColor(
+                                                hospital.status
+                                            )}`}
+                                        >
+
+                                            {hospital.status ||
+                                                "Pending"}
+
+                                        </span>
+
+                                    </div>
+
+                                    {/* ==============================
+                                        ACTIONS
+                                    ============================== */}
+
+                                    <div className="flex justify-end w-full xl:w-auto">
+
+                                        <div className="flex items-center gap-2">
+
+                                            {/* VIEW */}
+
+                                            <button
+                                                onClick={() =>
+                                                    viewHospital(
+                                                        hospital
+                                                    )
+                                                }
+                                                title="View Profile"
+                                                className="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition"
+                                            >
                                                 <FaEye />
                                             </button>
 
-                                            {hospital.status === "Pending" && (
-                                                <>
+                                            {/* APPROVE */}
+
+                                            {hospital.status ===
+                                                "Pending" && (
+
                                                     <button
-                                                        onClick={() => updateStatus(hospital.id, "Approved")}
-                                                        className="bg-green-600 hover:bg-green-700 text-white p-2 rounded"
+                                                        onClick={() =>
+                                                            updateStatus(
+                                                                hospital.id,
+                                                                "Approved"
+                                                            )
+                                                        }
+                                                        title="Approve Hospital"
+                                                        className="w-10 h-10 flex items-center justify-center rounded-lg bg-green-100 text-green-600 hover:bg-green-600 hover:text-white transition"
                                                     >
                                                         <FaCheck />
                                                     </button>
 
+                                                )}
+
+                                            {/* REJECT */}
+
+                                            {hospital.status ===
+                                                "Pending" && (
+
                                                     <button
-                                                        onClick={() => updateStatus(hospital.id, "Rejected")}
-                                                        className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded"
+                                                        onClick={() =>
+                                                            updateStatus(
+                                                                hospital.id,
+                                                                "Rejected"
+                                                            )
+                                                        }
+                                                        title="Reject Hospital"
+                                                        className="w-10 h-10 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition"
                                                     >
                                                         <FaTimes />
                                                     </button>
-                                                </>
-                                            )}
+
+                                                )}
+
+                                            {/* BLOCK */}
+
+                                            {hospital.status !==
+                                                "Blocked" &&
+                                                hospital.status ===
+                                                "Approved" && (
+
+                                                    <button
+                                                        onClick={() =>
+                                                            updateStatus(
+                                                                hospital.id,
+                                                                "Blocked"
+                                                            )
+                                                        }
+                                                        title="Block Hospital"
+                                                        className="w-10 h-10 flex items-center justify-center rounded-lg bg-yellow-100 text-yellow-600 hover:bg-yellow-500 hover:text-white transition"
+                                                    >
+                                                        <FaBan />
+                                                    </button>
+
+                                                )}
+
+                                            {/* UNBLOCK */}
+
+                                            {hospital.status ===
+                                                "Blocked" && (
+
+                                                    <button
+                                                        onClick={() =>
+                                                            updateStatus(
+                                                                hospital.id,
+                                                                "Approved"
+                                                            )
+                                                        }
+                                                        title="Unblock Hospital"
+                                                        className="w-10 h-10 flex items-center justify-center rounded-lg bg-green-100 text-green-600 hover:bg-green-600 hover:text-white transition"
+                                                    >
+                                                        <FaCheck />
+                                                    </button>
+
+                                                )}
+
+                                            {/* DELETE */}
 
                                             <button
-                                                onClick={() => deleteHospital(hospital.id)}
-                                                className="bg-red-600 hover:bg-red-700 text-white p-2 rounded"
+                                                onClick={() =>
+                                                    deleteHospital(
+                                                        hospital.id
+                                                    )
+                                                }
+                                                title="Delete Hospital"
+                                                className="w-10 h-10 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition"
                                             >
                                                 <FaTrash />
                                             </button>
 
                                         </div>
-                                    </td>
 
-                                </tr>
+                                    </div>
 
-                            ))}
+                                </div>
 
-                        </tbody>
+                            </div>
 
-                    </table>
+                        ))
+
+                    )}
 
                 </div>
 
             </div>
+
+            {/* ==============================
+                HOSPITAL PROFILE MODAL
+            ============================== */}
+
+            {selectedHospital && (
+
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+
+                        {/* Modal Header */}
+
+                        <div className="flex justify-between items-center p-6 border-b">
+
+                            <div>
+
+                                <h2 className="text-2xl font-bold text-gray-800">
+                                    Hospital Profile
+                                </h2>
+
+                                <p className="text-gray-500 text-sm">
+                                    Hospital ID:{" "}
+                                    {selectedHospital.id}
+                                </p>
+
+                            </div>
+
+                            <button
+                                onClick={() =>
+                                    setSelectedHospital(null)
+                                }
+                                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-red-100 hover:text-red-600"
+                            >
+                                <FaTimesCircle />
+                            </button>
+
+                        </div>
+
+                        {/* Profile Content */}
+
+                        <div className="p-6">
+
+                            {/* Profile Header */}
+
+                            <div className="flex items-center gap-4 mb-6">
+
+                                <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center">
+
+                                    <FaHospital className="text-red-600 text-3xl" />
+
+                                </div>
+
+                                <div>
+
+                                    <h3 className="text-2xl font-bold text-gray-800">
+
+                                        {selectedHospital.hospitalName}
+
+                                    </h3>
+
+                                    <p className="text-gray-500">
+
+                                        {selectedHospital.email ||
+                                            "No email"}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            {/* Hospital Details */}
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                                <ProfileItem
+                                    label="Hospital Name"
+                                    value={
+                                        selectedHospital.hospitalName
+                                    }
+                                />
+
+                                <ProfileItem
+                                    label="Hospital Type"
+                                    value={
+                                        selectedHospital.hospitalType
+                                    }
+                                />
+
+                                <ProfileItem
+                                    label="Phone"
+                                    value={
+                                        selectedHospital.phone
+                                    }
+                                />
+
+                                <ProfileItem
+                                    label="Email"
+                                    value={
+                                        selectedHospital.email
+                                    }
+                                />
+
+                                <ProfileItem
+                                    label="Registration / License Number"
+                                    value={
+                                        selectedHospital.registrationNumber
+                                    }
+                                />
+
+                                <ProfileItem
+                                    label="City"
+                                    value={
+                                        selectedHospital.city
+                                    }
+                                />
+
+                                <ProfileItem
+                                    label="District"
+                                    value={
+                                        selectedHospital.district
+                                    }
+                                />
+
+                                <ProfileItem
+                                    label="State"
+                                    value={
+                                        selectedHospital.state
+                                    }
+                                />
+
+                                <ProfileItem
+                                    label="Pincode"
+                                    value={
+                                        selectedHospital.pincode
+                                    }
+                                />
+
+                            </div>
+
+                            {/* Address */}
+
+                            <div className="mt-4">
+
+                                <ProfileItem
+                                    label="Address"
+                                    value={
+                                        selectedHospital.address
+                                    }
+                                />
+
+                            </div>
+
+                            {/* Status */}
+
+                            <div className="mt-6 p-4 bg-gray-50 rounded-xl">
+
+                                <p className="text-sm text-gray-500 mb-2">
+                                    Registration Status
+                                </p>
+
+                                <span
+                                    className={`px-4 py-2 rounded-full font-semibold ${getStatusColor(
+                                        selectedHospital.status
+                                    )}`}
+                                >
+
+                                    {selectedHospital.status ||
+                                        "Pending"}
+
+                                </span>
+
+                            </div>
+
+                            {/* ==============================
+                                ADMIN ACTIONS
+                            ============================== */}
+
+                            <div className="flex flex-wrap gap-3 mt-6">
+
+                                {/* APPROVE */}
+
+                                {selectedHospital.status ===
+                                    "Pending" && (
+
+                                        <button
+                                            onClick={() =>
+                                                updateStatus(
+                                                    selectedHospital.id,
+                                                    "Approved"
+                                                )
+                                            }
+                                            className="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700"
+                                        >
+                                            <FaCheck />
+                                            Approve
+                                        </button>
+
+                                    )}
+
+                                {/* REJECT */}
+
+                                {selectedHospital.status ===
+                                    "Pending" && (
+
+                                        <button
+                                            onClick={() =>
+                                                updateStatus(
+                                                    selectedHospital.id,
+                                                    "Rejected"
+                                                )
+                                            }
+                                            className="flex items-center gap-2 bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700"
+                                        >
+                                            <FaTimes />
+                                            Reject
+                                        </button>
+
+                                    )}
+
+                                {/* BLOCK */}
+
+                                {selectedHospital.status ===
+                                    "Approved" && (
+
+                                        <button
+                                            onClick={() =>
+                                                updateStatus(
+                                                    selectedHospital.id,
+                                                    "Blocked"
+                                                )
+                                            }
+                                            className="flex items-center gap-2 bg-yellow-500 text-white px-5 py-2 rounded-lg hover:bg-yellow-600"
+                                        >
+                                            <FaBan />
+                                            Block
+                                        </button>
+
+                                    )}
+
+                                {/* UNBLOCK */}
+
+                                {selectedHospital.status ===
+                                    "Blocked" && (
+
+                                        <button
+                                            onClick={() =>
+                                                updateStatus(
+                                                    selectedHospital.id,
+                                                    "Approved"
+                                                )
+                                            }
+                                            className="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700"
+                                        >
+                                            <FaCheck />
+                                            Unblock
+                                        </button>
+
+                                    )}
+
+                                {/* DELETE */}
+
+                                <button
+                                    onClick={() =>
+                                        deleteHospital(
+                                            selectedHospital.id
+                                        )
+                                    }
+                                    className="flex items-center gap-2 bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700"
+                                >
+                                    <FaTrash />
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+        </div>
+    );
+}
+
+// ==============================
+// PROFILE ITEM
+// ==============================
+
+function ProfileItem({ label, value }) {
+    return (
+        <div className="bg-gray-50 rounded-lg p-4">
+
+            <p className="text-sm text-gray-500">
+                {label}
+            </p>
+
+            <p className="font-semibold text-gray-800 mt-1">
+                {value || "N/A"}
+            </p>
+
         </div>
     );
 }

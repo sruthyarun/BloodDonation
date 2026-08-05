@@ -81,11 +81,11 @@ function AdminPanel() {
                 </Link>
 
                 <Link
-                    to="/blood-inventoryAD"
+                    to="/blood-stock-managementAD"
                     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
                 >
                     <FaTint />
-                    Blood Inventory
+                    Blood Stocks
                 </Link>
 
                 <Link
