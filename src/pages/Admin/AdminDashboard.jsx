@@ -197,61 +197,11 @@ function AdminDashboard() {
 
                 </div>
 
-                {/* Quick Actions */}
 
-                <div className="mt-10">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-5">
-                        Quick Actions
-                    </h2>
-
-                    <div className="grid md:grid-cols-4 gap-5">
-
-                        <Link
-                            to="/hospital-management"
-                            className="bg-white rounded-xl shadow p-5 text-center hover:bg-red-50 transition"
-                        >
-                            <FaHospital className="text-3xl text-red-600 mx-auto mb-3" />
-                            <p className="font-semibold">
-                                Manage Hospitals
-                            </p>
-                        </Link>
-
-                        <Link
-                            to="/donor-management"
-                            className="bg-white rounded-xl shadow p-5 text-center hover:bg-blue-50 transition"
-                        >
-                            <FaUsers className="text-3xl text-blue-600 mx-auto mb-3" />
-                            <p className="font-semibold">
-                                Manage Donors
-                            </p>
-                        </Link>
-
-                        <Link
-                            to="/blood-requests"
-                            className="bg-white rounded-xl shadow p-5 text-center hover:bg-green-50 transition"
-                        >
-                            <FaClipboardList className="text-3xl text-green-600 mx-auto mb-3" />
-                            <p className="font-semibold">
-                                Blood Requests
-                            </p>
-                        </Link>
-
-                        <Link
-                            to="/appointment-management"
-                            className="bg-white rounded-xl shadow p-5 text-center hover:bg-purple-50 transition"
-                        >
-                            <FaCalendarAlt className="text-3xl text-purple-600 mx-auto mb-3" />
-                            <p className="font-semibold">
-                                Appointments
-                            </p>
-                        </Link>
-
-                    </div>
-                </div>
 
                 {/* Recent Activities */}
 
-                <div className="mt-10">
+                < div className="mt-10" >
 
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold text-gray-800">
@@ -308,11 +258,11 @@ function AdminDashboard() {
 
                     </div>
 
-                </div>
+                </div >
 
-            </main>
+            </main >
 
-        </div>
+        </div >
     );
 }
 
