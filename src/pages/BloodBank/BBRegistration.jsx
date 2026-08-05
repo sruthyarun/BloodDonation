@@ -37,7 +37,7 @@ function BloodBankRegistration() {
         password: "",
         confirmPassword: "",
         logo: "",
-        status: "pending",
+        status: "Pending",
     };
 
     const [formData, setFormData] = useState(initialFormData);

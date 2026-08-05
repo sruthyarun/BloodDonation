@@ -18,6 +18,7 @@ const initialForm = {
     district: "",
     contact: "",
     reason: "",
+    status: "Active",
 };
 
 function HospitalEmergencyRequest() {

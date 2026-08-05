@@ -37,6 +37,7 @@ function RecipientRegistration() {
         pincode: "",
         password: "",
         confirmPassword: "",
+        status: "Pending",
     };
 
     const [formData, setFormData] = useState(initialFormData);

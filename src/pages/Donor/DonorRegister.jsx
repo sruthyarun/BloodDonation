@@ -36,6 +36,7 @@ function DonorRegistration() {
         availability: "",
         password: "",
         confirmPassword: "",
+        status: "Pending",
     };
 
     const [formData, setFormData] = useState(initialFormData);

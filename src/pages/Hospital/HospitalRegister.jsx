@@ -39,6 +39,7 @@ function HospitalRegistration() {
         password: "",
         confirmPassword: "",
         logo: "",
+        status: "Pending",
     };
 
     const [formData, setFormData] = useState(initialFormData);
