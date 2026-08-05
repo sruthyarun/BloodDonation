@@ -1121,7 +1121,7 @@
 {
     "id": "2",
     "bloodGroup": "O+",
-    "availableUnits": 2,
+    "availableUnits": 8,
     "reservedUnits": 0,
     "expiredUnits": 0,
     "minimumUnits": 10,

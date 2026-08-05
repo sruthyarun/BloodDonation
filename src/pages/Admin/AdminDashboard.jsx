@@ -19,6 +19,7 @@ function AdminDashboard() {
     const [donors, setDonors] = useState([]);
     const [recipients, setRecipients] = useState([]);
     const [hospitals, setHospitals] = useState([]);
+    const [bloodBanks, setBloodBanks] = useState([]);
     const [inventory, setInventory] = useState([]);
     const [bloodRequests, setBloodRequests] = useState([]);
     const [appointments, setAppointments] = useState([]);
@@ -33,12 +34,14 @@ function AdminDashboard() {
                 donorRes,
                 recipientRes,
                 hospitalRes,
+                bloodBankRes,
                 appointmentRes,
                 requestRes,
             ] = await Promise.all([
                 axios.get("https://blood-donation-backend-olwl.onrender.com/donors"),
                 axios.get("https://blood-donation-backend-olwl.onrender.com/recipients"),
                 axios.get("https://blood-donation-backend-olwl.onrender.com/hospitals"),
+                axios.get("https://blood-donation-backend-olwl.onrender.com/bloodBanks"),
                 axios.get("https://blood-donation-backend-olwl.onrender.com/appointments"),
                 axios.get("https://blood-donation-backend-olwl.onrender.com/bloodRequests"),
             ]);
@@ -48,6 +51,7 @@ function AdminDashboard() {
             setHospitals(hospitalRes.data);
             setAppointments(appointmentRes.data);
             setBloodRequests(requestRes.data);
+            setBloodBanks(bloodBankRes.data);
 
         } catch (err) {
             console.log(err);
@@ -141,12 +145,9 @@ function AdminDashboard() {
                     <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
                         <FaTint className="text-pink-600 text-4xl mb-3" />
                         <h2 className="text-3xl font-bold">
-                            {inventory.reduce(
-                                (total, item) => total + Number(item.units || 0),
-                                0
-                            )}
+                            {bloodBanks.length}
                         </h2>
-                        <p className="text-gray-500">Blood Units</p>
+                        <p className="text-gray-500">Blood Banks</p>
                     </div>
 
                 </div>
