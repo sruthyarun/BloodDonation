@@ -1015,6 +1015,233 @@ function BloodStockManagementADm() {
 
                     )}
 
+                {/* REPORTS */}
+
+                <div className="bg-white rounded-2xl shadow-md p-6 mb-8">
+
+                    <div className="flex items-center gap-3 mb-5">
+
+                        <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+
+                            <FaFileAlt className="text-red-600 text-xl" />
+
+                        </div>
+
+                        <div>
+
+                            <h2 className="text-xl font-bold text-gray-800">
+                                Blood Stock Reports
+                            </h2>
+
+                            <p className="text-gray-500 text-sm">
+                                Generate and export
+                                inventory reports.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-3">
+
+                        <select
+                            value={reportType}
+                            onChange={(e) =>
+                                setReportType(
+                                    e.target.value
+                                )
+                            }
+                            className="border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-500"
+                        >
+
+                            <option value="current">
+                                Current Blood Stock Report
+                            </option>
+
+                            <option value="bloodGroup">
+                                Blood Group-wise Stock Report
+                            </option>
+
+                            <option value="lowStock">
+                                Low Stock Report
+                            </option>
+
+                            <option value="expired">
+                                Expired Stock Report
+                            </option>
+
+                            <option value="collection">
+                                Blood Collection Report
+                            </option>
+
+                            <option value="issued">
+                                Blood Issued Report
+                            </option>
+
+                            <option value="monthly">
+                                Monthly Stock Report
+                            </option>
+
+                        </select>
+
+                        <button
+                            onClick={
+                                generateReport
+                            }
+                            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg font-semibold"
+                        >
+                            <FaDownload />
+                            Export Report
+                        </button>
+
+                        <button
+                            onClick={
+                                printReport
+                            }
+                            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold"
+                        >
+                            <FaPrint />
+                            Print
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {/* RECENT STOCK UPDATES */}
+
+                <div className="mb-8">
+
+                    <div className="flex items-center gap-3 mb-5">
+
+                        <FaCalendarAlt className="text-red-600 text-xl" />
+
+                        <div>
+
+                            <h2 className="text-2xl font-bold text-gray-800">
+                                Recent Stock Updates
+                            </h2>
+
+                            <p className="text-gray-500">
+                                Latest updates from
+                                hospitals and blood
+                                banks.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div className="space-y-4">
+
+                        {inventory
+                            .slice()
+                            .sort(
+                                (a, b) =>
+                                    new Date(
+                                        b.lastUpdated ||
+                                        0
+                                    ) -
+                                    new Date(
+                                        a.lastUpdated ||
+                                        0
+                                    )
+                            )
+                            .slice(0, 5)
+                            .map((item) => {
+
+                                const status =
+                                    getStatus(
+                                        item.availableUnits,
+                                        item.minimumUnits
+                                    );
+
+                                return (
+                                    <div
+                                        key={
+                                            item.id
+                                        }
+                                        className="bg-white rounded-xl shadow p-5"
+                                    >
+
+                                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+                                            <div className="flex items-center gap-4">
+
+                                                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+
+                                                    <FaTint className="text-red-600" />
+
+                                                </div>
+
+                                                <div>
+
+                                                    <h3 className="font-bold text-gray-800">
+                                                        {
+                                                            item.bloodGroup
+                                                        }
+                                                    </h3>
+
+                                                    <p className="text-sm text-gray-500">
+                                                        {
+                                                            item.ownerName ||
+                                                            "Unknown Facility"
+                                                        }
+                                                    </p>
+
+                                                    <p className="text-xs text-gray-400">
+                                                        {
+                                                            item.ownerType
+                                                        }
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div className="flex items-center gap-5">
+
+                                                <div>
+                                                    <p className="text-xs text-gray-400">
+                                                        Available
+                                                    </p>
+
+                                                    <p className="font-bold text-red-600">
+                                                        {
+                                                            item.availableUnits
+                                                        }
+                                                    </p>
+                                                </div>
+
+                                                <span
+                                                    className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
+                                                        status
+                                                    )}`}
+                                                >
+                                                    {
+                                                        status
+                                                    }
+                                                </span>
+
+                                                <p className="text-sm text-gray-400">
+                                                    {item.lastUpdated
+                                                        ? new Date(
+                                                            item.lastUpdated
+                                                        ).toLocaleDateString()
+                                                        : "-"}
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                );
+                            })}
+
+                    </div>
+
+                </div>
 
                 {/* INVENTORY LIST */}
 
