@@ -11,6 +11,7 @@ import {
     FaChartBar,
     FaUser,
     FaSignOutAlt,
+    FaExclamationTriangle,
 } from "react-icons/fa";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -73,6 +74,14 @@ function AdminPanel() {
                 </Link>
 
                 <Link
+                    to="/bloodbank-managementAD"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
+                >
+                    <FaTint />
+                    Blood Banks
+                </Link>
+
+                <Link
                     to="/donation-events-managementAD"
                     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
                 >
@@ -81,35 +90,18 @@ function AdminPanel() {
                 </Link>
 
                 <Link
-                    to="/blood-stock-managementAD"
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
-                >
-                    <FaTint />
-                    Blood Stocks
-                </Link>
-
-                <Link
-                    to="/emergency-requestsAD"
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
-                >
-                    <FaHeartbeat />
-                    Emergency Requests
-                </Link>
-
-                <Link
-                    to="/notificationsAD"
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
-                >
-                    <FaBell />
-                    Notifications
-                </Link>
-
-                <Link
                     to="/blood-stock-reports"
                     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
                 >
                     <FaChartBar />
                     Blood Stock Reports
+                </Link>
+                <Link
+                    to="/feedbacksAD"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
+                >
+                    <FaBell />
+                    Feedbacks
                 </Link>
 
                 <Link
@@ -130,7 +122,7 @@ function AdminPanel() {
 
             </nav>
 
-        </aside>
+        </aside >
     );
 }
 

@@ -81,6 +81,7 @@ import RecipientEmergencyRequest from "./pages/Recipient/EmergencyRequests";
 import AdminEmergencyRequests from "./pages/Admin/EmergencyAD";
 import BloodStockManagementADm from "./pages/Admin/bloodStockManagement";
 import DonationEventManagementADm from "./pages/Admin/donationEventsManagementAD";
+import FeedbackManagementADm from "./pages/Admin/feedbacksAD";
 
 
 
@@ -142,6 +143,9 @@ const router = createBrowserRouter([
   },
   {
     path: "/donation-events-managementAD", element: <DonationEventManagementADm />
+  },
+  {
+    path: "/feedbacksAD", element: <FeedbackManagementADm />
   },
 
   // Blood Bank
