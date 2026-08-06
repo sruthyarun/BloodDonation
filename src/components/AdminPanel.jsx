@@ -89,22 +89,6 @@ function AdminPanel() {
                 </Link>
 
                 <Link
-                    to="/blood-requestsAD"
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
-                >
-                    <FaClipboardList />
-                    Blood Requests
-                </Link>
-
-                <Link
-                    to="/appointment-managementAD"
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
-                >
-                    <FaCalendarAlt />
-                    Appointments
-                </Link>
-
-                <Link
                     to="/emergency-requestsAD"
                     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
                 >

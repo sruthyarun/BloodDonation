@@ -11,12 +11,11 @@ import {
     FaDownload,
     FaPrint,
     FaSyncAlt,
-    FaCheckCircle,
     FaTimesCircle,
     FaHospital,
     FaCalendarAlt,
-    FaChartBar,
     FaFileAlt,
+    FaBuilding,
 } from "react-icons/fa";
 
 import AdminPanel from "../../components/AdminPanel";
@@ -47,18 +46,19 @@ function BloodStockManagementADm() {
 
     const [formData, setFormData] = useState({
         bloodGroup: "",
-        units: "",
+        availableUnits: "",
         reservedUnits: "",
         expiredUnits: "",
-        hospital: "",
-        sourceType: "Blood Bank",
+        minimumUnits: "",
+        ownerName: "",
+        ownerType: "Blood Bank",
         lastUpdated: new Date()
             .toISOString()
             .split("T")[0],
     });
 
     // =====================================================
-    // FETCH INVENTORY
+    // FETCH ALL BLOOD STOCK
     // =====================================================
 
     useEffect(() => {
@@ -73,8 +73,8 @@ function BloodStockManagementADm() {
 
             setInventory(res.data);
         } catch (error) {
-            console.log(
-                "Error fetching blood inventory:",
+            console.error(
+                "Error fetching blood stocks:",
                 error
             );
         } finally {
@@ -89,17 +89,22 @@ function BloodStockManagementADm() {
     const filteredInventory = useMemo(() => {
         const value = search.toLowerCase().trim();
 
-        return inventory.filter(
-            (item) =>
-                item.bloodGroup
-                    ?.toLowerCase()
-                    .includes(value) ||
-                item.hospital
-                    ?.toLowerCase()
-                    .includes(value) ||
-                item.sourceType
-                    ?.toLowerCase()
+        if (!value) {
+            return inventory;
+        }
+
+        return inventory.filter((item) =>
+            [
+                item.bloodGroup,
+                item.ownerName,
+                item.ownerType,
+                item.ownerId,
+                item.status,
+            ].some((field) =>
+                String(field || "")
+                    .toLowerCase()
                     .includes(value)
+            )
         );
     }, [inventory, search]);
 
@@ -107,18 +112,27 @@ function BloodStockManagementADm() {
     // STATUS
     // =====================================================
 
-    const getStatus = (units) => {
-        const value = Number(units || 0);
+    const getStatus = (
+        availableUnits,
+        minimumUnits
+    ) => {
+        const available = Number(
+            availableUnits || 0
+        );
 
-        if (value === 0) {
+        const minimum = Number(
+            minimumUnits || 0
+        );
+
+        if (available === 0) {
             return "Out of Stock";
         }
 
-        if (value <= 5) {
+        if (available < minimum / 2) {
             return "Critical";
         }
 
-        if (value <= 15) {
+        if (available < minimum) {
             return "Low Stock";
         }
 
@@ -150,35 +164,62 @@ function BloodStockManagementADm() {
 
     const totalUnits = inventory.reduce(
         (sum, item) =>
-            sum + Number(item.units || 0),
+            sum +
+            Number(item.availableUnits || 0),
         0
     );
 
     const reservedUnits = inventory.reduce(
         (sum, item) =>
-            sum + Number(item.reservedUnits || 0),
+            sum +
+            Number(item.reservedUnits || 0),
         0
     );
 
     const expiredUnits = inventory.reduce(
         (sum, item) =>
-            sum + Number(item.expiredUnits || 0),
+            sum +
+            Number(item.expiredUnits || 0),
         0
     );
 
     const lowStock = inventory.filter(
         (item) =>
-            getStatus(item.units) === "Low Stock"
+            getStatus(
+                item.availableUnits,
+                item.minimumUnits
+            ) === "Low Stock"
     ).length;
 
     const critical = inventory.filter(
         (item) =>
-            getStatus(item.units) === "Critical"
+            getStatus(
+                item.availableUnits,
+                item.minimumUnits
+            ) === "Critical"
     ).length;
 
     const outOfStock = inventory.filter(
         (item) =>
-            getStatus(item.units) === "Out of Stock"
+            getStatus(
+                item.availableUnits,
+                item.minimumUnits
+            ) === "Out of Stock"
+    ).length;
+
+    // =====================================================
+    // HOSPITAL / BLOOD BANK COUNTS
+    // =====================================================
+
+    const hospitals = inventory.filter(
+        (item) =>
+            item.ownerType === "Hospital"
+    ).length;
+
+    const bloodBanks = inventory.filter(
+        (item) =>
+            item.ownerType === "BloodBank" ||
+            item.ownerType === "Blood Bank"
     ).length;
 
     // =====================================================
@@ -194,7 +235,10 @@ function BloodStockManagementADm() {
 
             const units = items.reduce(
                 (sum, item) =>
-                    sum + Number(item.units || 0),
+                    sum +
+                    Number(
+                        item.availableUnits || 0
+                    ),
                 0
             );
 
@@ -221,7 +265,10 @@ function BloodStockManagementADm() {
                 units,
                 reserved,
                 expired,
-                status: getStatus(units),
+                status: getStatus(
+                    units,
+                    10
+                ),
             };
         }
     );
@@ -230,28 +277,27 @@ function BloodStockManagementADm() {
     // RECEIVED BLOOD
     // =====================================================
 
-    const receivedUnits = inventory
-        .filter(
-            (item) =>
-                item.type === "Received" ||
-                item.sourceType === "Blood Bank"
-        )
-        .reduce(
-            (sum, item) =>
-                sum + Number(item.receivedUnits || 0),
-            0
-        );
+    const receivedUnits = inventory.reduce(
+        (sum, item) =>
+            sum +
+            Number(
+                item.receivedUnits || 0
+            ),
+        0
+    );
 
     // =====================================================
     // ISSUED BLOOD
     // =====================================================
 
-    const issuedUnits = inventory
-        .reduce(
-            (sum, item) =>
-                sum + Number(item.issuedUnits || 0),
-            0
-        );
+    const issuedUnits = inventory.reduce(
+        (sum, item) =>
+            sum +
+            Number(
+                item.issuedUnits || 0
+            ),
+        0
+    );
 
     // =====================================================
     // FORM CHANGE
@@ -275,11 +321,12 @@ function BloodStockManagementADm() {
 
         setFormData({
             bloodGroup: "",
-            units: "",
+            availableUnits: "",
             reservedUnits: "",
             expiredUnits: "",
-            hospital: "",
-            sourceType: "Blood Bank",
+            minimumUnits: "",
+            ownerName: "",
+            ownerType: "Blood Bank",
             lastUpdated: new Date()
                 .toISOString()
                 .split("T")[0],
@@ -298,21 +345,31 @@ function BloodStockManagementADm() {
         setFormData({
             bloodGroup:
                 item.bloodGroup || "",
-            units: item.units || "",
+
+            availableUnits:
+                item.availableUnits ?? "",
+
             reservedUnits:
-                item.reservedUnits || "",
+                item.reservedUnits ?? 0,
+
             expiredUnits:
-                item.expiredUnits || "",
-            hospital:
-                item.hospital || "",
-            sourceType:
-                item.sourceType ||
-                "Blood Bank",
+                item.expiredUnits ?? 0,
+
+            minimumUnits:
+                item.minimumUnits ?? 10,
+
+            ownerName:
+                item.ownerName || "",
+
+            ownerType:
+                item.ownerType || "Blood Bank",
+
             lastUpdated:
-                item.lastUpdated ||
-                new Date()
-                    .toISOString()
-                    .split("T")[0],
+                item.lastUpdated
+                    ? item.lastUpdated.split("T")[0]
+                    : new Date()
+                        .toISOString()
+                        .split("T")[0],
         });
 
         setShowModal(true);
@@ -326,29 +383,51 @@ function BloodStockManagementADm() {
         e.preventDefault();
 
         try {
-            const units = Number(
-                formData.units || 0
+            const availableUnits = Number(
+                formData.availableUnits || 0
             );
 
-            const status = getStatus(units);
+            const reservedUnits = Number(
+                formData.reservedUnits || 0
+            );
+
+            const expiredUnits = Number(
+                formData.expiredUnits || 0
+            );
+
+            const minimumUnits = Number(
+                formData.minimumUnits || 0
+            );
+
+            const status = getStatus(
+                availableUnits,
+                minimumUnits
+            );
 
             const stockData = {
                 bloodGroup:
                     formData.bloodGroup,
-                units,
-                reservedUnits: Number(
-                    formData.reservedUnits || 0
-                ),
-                expiredUnits: Number(
-                    formData.expiredUnits || 0
-                ),
-                hospital:
-                    formData.hospital,
-                sourceType:
-                    formData.sourceType,
+
+                availableUnits,
+
+                reservedUnits,
+
+                expiredUnits,
+
+                minimumUnits,
+
+                ownerName:
+                    formData.ownerName,
+
+                ownerType:
+                    formData.ownerType,
+
                 status,
+
                 lastUpdated:
-                    formData.lastUpdated,
+                    new Date(
+                        formData.lastUpdated
+                    ).toISOString(),
             };
 
             if (editingItem) {
@@ -362,15 +441,18 @@ function BloodStockManagementADm() {
             } else {
                 await axios.post(
                     API_URL,
-                    stockData
+                    {
+                        ...stockData,
+                        id: `BS${Date.now()}`,
+                    }
                 );
             }
 
             setShowModal(false);
 
-            fetchInventory();
+            await fetchInventory();
         } catch (error) {
-            console.log(
+            console.error(
                 "Error saving stock:",
                 error
             );
@@ -388,7 +470,7 @@ function BloodStockManagementADm() {
     const deleteStock = async (id) => {
         if (
             !window.confirm(
-                "Delete this stock?"
+                "Delete this blood stock record?"
             )
         ) {
             return;
@@ -399,11 +481,15 @@ function BloodStockManagementADm() {
                 `${API_URL}/${id}`
             );
 
-            fetchInventory();
+            await fetchInventory();
         } catch (error) {
-            console.log(
+            console.error(
                 "Error deleting stock:",
                 error
+            );
+
+            alert(
+                "Unable to delete blood stock."
             );
         }
     };
@@ -424,13 +510,17 @@ function BloodStockManagementADm() {
         }
 
         if (reportType === "lowStock") {
-            data = inventory.filter(
-                (item) =>
-                    getStatus(item.units) ===
-                    "Low Stock" ||
-                    getStatus(item.units) ===
-                    "Critical"
-            );
+            data = inventory.filter((item) => {
+                const status = getStatus(
+                    item.availableUnits,
+                    item.minimumUnits
+                );
+
+                return (
+                    status === "Low Stock" ||
+                    status === "Critical"
+                );
+            });
         }
 
         if (reportType === "expired") {
@@ -445,9 +535,9 @@ function BloodStockManagementADm() {
         if (reportType === "collection") {
             data = inventory.filter(
                 (item) =>
-                    item.type === "Received" ||
-                    item.sourceType ===
-                    "Blood Bank"
+                    Number(
+                        item.receivedUnits || 0
+                    ) > 0
             );
         }
 
@@ -464,17 +554,28 @@ function BloodStockManagementADm() {
             const currentMonth =
                 new Date().getMonth();
 
-            data = inventory.filter((item) => {
-                if (!item.lastUpdated)
-                    return false;
+            const currentYear =
+                new Date().getFullYear();
 
-                return (
-                    new Date(
-                        item.lastUpdated
-                    ).getMonth() ===
-                    currentMonth
-                );
-            });
+            data = inventory.filter(
+                (item) => {
+                    if (!item.lastUpdated) {
+                        return false;
+                    }
+
+                    const date =
+                        new Date(
+                            item.lastUpdated
+                        );
+
+                    return (
+                        date.getMonth() ===
+                        currentMonth &&
+                        date.getFullYear() ===
+                        currentYear
+                    );
+                }
+            );
         }
 
         if (data.length === 0) {
@@ -485,7 +586,9 @@ function BloodStockManagementADm() {
             return;
         }
 
-        const headers = Object.keys(data[0]);
+        const headers = Object.keys(
+            data[0]
+        );
 
         const csvRows = [
             headers.join(","),
@@ -494,8 +597,9 @@ function BloodStockManagementADm() {
                     .map(
                         (header) =>
                             `"${String(
-                                item[header] ??
-                                ""
+                                item[
+                                header
+                                ] ?? ""
                             ).replace(
                                 /"/g,
                                 '""'
@@ -543,9 +647,7 @@ function BloodStockManagementADm() {
 
             <div className="flex-1 p-8">
 
-                {/* =========================================
-                    HEADER
-                ========================================= */}
+                {/* HEADER */}
 
                 <div className="flex flex-col lg:flex-row justify-between gap-5 mb-8">
 
@@ -555,9 +657,9 @@ function BloodStockManagementADm() {
                         </h1>
 
                         <p className="text-gray-500 mt-2">
-                            Monitor blood stock,
-                            collection, issued units
-                            and inventory reports.
+                            View and manage blood
+                            stock from all hospitals
+                            and blood banks.
                         </p>
                     </div>
 
@@ -569,21 +671,22 @@ function BloodStockManagementADm() {
 
                             <input
                                 type="text"
-                                placeholder="Search blood group..."
+                                placeholder="Search facility, blood group..."
                                 value={search}
                                 onChange={(e) =>
                                     setSearch(
-                                        e.target
-                                            .value
+                                        e.target.value
                                     )
                                 }
-                                className="ml-2 outline-none w-52"
+                                className="ml-2 outline-none w-64"
                             />
 
                         </div>
 
                         <button
-                            onClick={fetchInventory}
+                            onClick={
+                                fetchInventory
+                            }
                             className="flex items-center justify-center gap-2 bg-gray-700 text-white px-4 py-3 rounded-lg hover:bg-gray-800"
                         >
                             <FaSyncAlt />
@@ -594,9 +697,7 @@ function BloodStockManagementADm() {
 
                 </div>
 
-                {/* =========================================
-                    SUMMARY
-                ========================================= */}
+                {/* SUMMARY */}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-5 mb-8">
 
@@ -648,9 +749,71 @@ function BloodStockManagementADm() {
 
                 </div>
 
-                {/* =========================================
-                    RECEIVED / ISSUED
-                ========================================= */}
+                {/* FACILITY SUMMARY */}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+                    <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-600">
+
+                        <div className="flex items-center justify-between">
+
+                            <div>
+                                <p className="text-gray-500">
+                                    Hospitals
+                                </p>
+
+                                <p className="text-4xl font-bold text-blue-600 mt-2">
+                                    {hospitals}
+                                </p>
+
+                                <p className="text-sm text-gray-400 mt-1">
+                                    Hospitals with
+                                    blood stock
+                                </p>
+                            </div>
+
+                            <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center">
+
+                                <FaHospital className="text-blue-600 text-xl" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-600">
+
+                        <div className="flex items-center justify-between">
+
+                            <div>
+                                <p className="text-gray-500">
+                                    Blood Banks
+                                </p>
+
+                                <p className="text-4xl font-bold text-red-600 mt-2">
+                                    {bloodBanks}
+                                </p>
+
+                                <p className="text-sm text-gray-400 mt-1">
+                                    Blood banks with
+                                    blood stock
+                                </p>
+                            </div>
+
+                            <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center">
+
+                                <FaBuilding className="text-red-600 text-xl" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {/* RECEIVED / ISSUED */}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
@@ -668,8 +831,7 @@ function BloodStockManagementADm() {
                                 </p>
 
                                 <p className="text-sm text-gray-400 mt-1">
-                                    Units received from
-                                    blood banks
+                                    Units received
                                 </p>
                             </div>
 
@@ -697,8 +859,7 @@ function BloodStockManagementADm() {
                                 </p>
 
                                 <p className="text-sm text-gray-400 mt-1">
-                                    Units issued to
-                                    recipients
+                                    Units issued
                                 </p>
                             </div>
 
@@ -714,24 +875,21 @@ function BloodStockManagementADm() {
 
                 </div>
 
-                {/* =========================================
-                    BLOOD GROUP STOCK
-                ========================================= */}
+                {/* BLOOD GROUP STOCK */}
 
                 <div className="mb-8">
 
-                    <div className="flex justify-between items-center mb-5">
+                    <div className="mb-5">
 
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">
-                                Blood Group-wise Stock
-                            </h2>
+                        <h2 className="text-2xl font-bold text-gray-800">
+                            Blood Group-wise Stock
+                        </h2>
 
-                            <p className="text-gray-500">
-                                Current availability
-                                by blood group.
-                            </p>
-                        </div>
+                        <p className="text-gray-500">
+                            Total stock available
+                            across all hospitals
+                            and blood banks.
+                        </p>
 
                     </div>
 
@@ -822,9 +980,7 @@ function BloodStockManagementADm() {
 
                 </div>
 
-                {/* =========================================
-                    ALERTS
-                ========================================= */}
+                {/* ALERTS */}
 
                 {(lowStock > 0 ||
                     critical > 0 ||
@@ -843,14 +999,12 @@ function BloodStockManagementADm() {
                                     </h3>
 
                                     <p className="text-yellow-700 text-sm mt-1">
-
                                         {lowStock} low-stock
-                                        group(s),{" "}
+                                        record(s),{" "}
                                         {critical} critical
-                                        group(s), and{" "}
+                                        record(s), and{" "}
                                         {outOfStock} out-of-stock
-                                        group(s).
-
+                                        record(s).
                                     </p>
 
                                 </div>
@@ -861,222 +1015,8 @@ function BloodStockManagementADm() {
 
                     )}
 
-                {/* =========================================
-                    REPORTS
-                ========================================= */}
 
-                <div className="bg-white rounded-2xl shadow-md p-6 mb-8">
-
-                    <div className="flex items-center gap-3 mb-5">
-
-                        <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-
-                            <FaFileAlt className="text-red-600 text-xl" />
-
-                        </div>
-
-                        <div>
-
-                            <h2 className="text-xl font-bold text-gray-800">
-                                Blood Stock Reports
-                            </h2>
-
-                            <p className="text-gray-500 text-sm">
-                                Generate and export
-                                inventory reports.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <div className="flex flex-col md:flex-row gap-3">
-
-                        <select
-                            value={reportType}
-                            onChange={(e) =>
-                                setReportType(
-                                    e.target.value
-                                )
-                            }
-                            className="border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-500"
-                        >
-
-                            <option value="current">
-                                Current Blood Stock Report
-                            </option>
-
-                            <option value="bloodGroup">
-                                Blood Group-wise Stock Report
-                            </option>
-
-                            <option value="lowStock">
-                                Low Stock Report
-                            </option>
-
-                            <option value="expired">
-                                Expired Stock Report
-                            </option>
-
-                            <option value="collection">
-                                Blood Collection Report
-                            </option>
-
-                            <option value="issued">
-                                Blood Issued Report
-                            </option>
-
-                            <option value="monthly">
-                                Monthly Stock Report
-                            </option>
-
-                        </select>
-
-                        <button
-                            onClick={
-                                generateReport
-                            }
-                            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg font-semibold"
-                        >
-                            <FaDownload />
-                            Export Report
-                        </button>
-
-                        <button
-                            onClick={printReport}
-                            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold"
-                        >
-                            <FaPrint />
-                            Print
-                        </button>
-
-                    </div>
-
-                </div>
-
-                {/* =========================================
-                    RECENT STOCK UPDATES
-                ========================================= */}
-
-                <div className="mb-8">
-
-                    <div className="flex items-center gap-3 mb-5">
-
-                        <FaCalendarAlt className="text-red-600 text-xl" />
-
-                        <div>
-
-                            <h2 className="text-2xl font-bold text-gray-800">
-                                Recent Stock Updates
-                            </h2>
-
-                            <p className="text-gray-500">
-                                Latest inventory changes.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <div className="space-y-4">
-
-                        {inventory
-                            .slice()
-                            .sort(
-                                (a, b) =>
-                                    new Date(
-                                        b.lastUpdated ||
-                                        0
-                                    ) -
-                                    new Date(
-                                        a.lastUpdated ||
-                                        0
-                                    )
-                            )
-                            .slice(0, 5)
-                            .map((item) => (
-
-                                <div
-                                    key={item.id}
-                                    className="bg-white rounded-xl shadow p-5"
-                                >
-
-                                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-
-                                        <div className="flex items-center gap-4">
-
-                                            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-
-                                                <FaTint className="text-red-600" />
-
-                                            </div>
-
-                                            <div>
-
-                                                <h3 className="font-bold text-gray-800">
-                                                    {
-                                                        item.bloodGroup
-                                                    }
-                                                </h3>
-
-                                                <p className="text-sm text-gray-500">
-                                                    {
-                                                        item.hospital ||
-                                                        "Blood Bank"
-                                                    }
-                                                </p>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className="flex items-center gap-5">
-
-                                            <div>
-                                                <p className="text-xs text-gray-400">
-                                                    Units
-                                                </p>
-
-                                                <p className="font-bold">
-                                                    {
-                                                        item.units
-                                                    }
-                                                </p>
-                                            </div>
-
-                                            <span
-                                                className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
-                                                    getStatus(
-                                                        item.units
-                                                    )
-                                                )}`}
-                                            >
-                                                {getStatus(
-                                                    item.units
-                                                )}
-                                            </span>
-
-                                            <p className="text-sm text-gray-400">
-                                                {
-                                                    item.lastUpdated
-                                                }
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            ))}
-
-                    </div>
-
-                </div>
-
-                {/* =========================================
-                    INVENTORY LIST
-                ========================================= */}
+                {/* INVENTORY LIST */}
 
                 <div>
 
@@ -1085,18 +1025,21 @@ function BloodStockManagementADm() {
                         <div>
 
                             <h2 className="text-2xl font-bold text-gray-800">
-                                Inventory Records
+                                All Blood Stock
                             </h2>
 
                             <p className="text-gray-500">
-                                Manage individual stock
-                                records.
+                                Blood stock from all
+                                registered hospitals
+                                and blood banks.
                             </p>
 
                         </div>
 
                         <button
-                            onClick={openAddModal}
+                            onClick={
+                                openAddModal
+                            }
                             className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-lg font-semibold"
                         >
                             <FaPlus />
@@ -1125,8 +1068,8 @@ function BloodStockManagementADm() {
                             <FaTint className="mx-auto text-gray-300 text-5xl" />
 
                             <p className="text-gray-500 mt-3">
-                                No inventory records
-                                found.
+                                No blood stock
+                                records found.
                             </p>
 
                         </div>
@@ -1140,7 +1083,8 @@ function BloodStockManagementADm() {
 
                                     const status =
                                         getStatus(
-                                            item.units
+                                            item.availableUnits,
+                                            item.minimumUnits
                                         );
 
                                     return (
@@ -1154,7 +1098,7 @@ function BloodStockManagementADm() {
 
                                             <div className="flex flex-col xl:flex-row xl:items-center gap-6">
 
-                                                {/* Blood */}
+                                                {/* BLOOD GROUP */}
 
                                                 <div className="flex items-center gap-4 flex-1">
 
@@ -1183,74 +1127,106 @@ function BloodStockManagementADm() {
 
                                                 </div>
 
-                                                {/* Units */}
+                                                {/* OWNER */}
 
-                                                <div className="flex gap-3">
+                                                <div className="min-w-56">
 
-                                                    <div className="bg-red-50 rounded-lg px-5 py-3 text-center">
+                                                    <p className="text-xs text-gray-400">
+                                                        Facility
+                                                    </p>
 
-                                                        <p className="text-xs text-gray-500">
-                                                            Available
-                                                        </p>
+                                                    <p className="font-semibold text-gray-800">
+                                                        {
+                                                            item.ownerName ||
+                                                            "Unknown"
+                                                        }
+                                                    </p>
 
-                                                        <p className="text-2xl font-bold text-red-600">
-                                                            {
-                                                                item.units
-                                                            }
-                                                        </p>
+                                                    <span className="inline-flex items-center gap-1 text-xs text-gray-500 mt-1">
 
-                                                    </div>
+                                                        {item.ownerType ===
+                                                            "Hospital" ? (
+                                                            <FaHospital />
+                                                        ) : (
+                                                            <FaBuilding />
+                                                        )}
 
-                                                    <div className="bg-blue-50 rounded-lg px-5 py-3 text-center">
+                                                        {
+                                                            item.ownerType
+                                                        }
 
-                                                        <p className="text-xs text-gray-500">
-                                                            Reserved
-                                                        </p>
-
-                                                        <p className="text-2xl font-bold text-blue-600">
-                                                            {
-                                                                item.reservedUnits ||
-                                                                0
-                                                            }
-                                                        </p>
-
-                                                    </div>
-
-                                                    <div className="bg-gray-100 rounded-lg px-5 py-3 text-center">
-
-                                                        <p className="text-xs text-gray-500">
-                                                            Expired
-                                                        </p>
-
-                                                        <p className="text-2xl font-bold text-gray-600">
-                                                            {
-                                                                item.expiredUnits ||
-                                                                0
-                                                            }
-                                                        </p>
-
-                                                    </div>
+                                                    </span>
 
                                                 </div>
 
-                                                {/* Source */}
+                                                {/* AVAILABLE */}
 
-                                                <div className="min-w-48">
+                                                <div className="bg-red-50 rounded-lg px-5 py-3 text-center">
 
-                                                    <p className="text-xs text-gray-400">
-                                                        Source
+                                                    <p className="text-xs text-gray-500">
+                                                        Available
                                                     </p>
 
-                                                    <p className="font-semibold text-gray-700">
+                                                    <p className="text-2xl font-bold text-red-600">
                                                         {
-                                                            item.hospital ||
-                                                            "Blood Bank"
+                                                            item.availableUnits
                                                         }
                                                     </p>
 
                                                 </div>
 
-                                                {/* Status */}
+                                                {/* RESERVED */}
+
+                                                <div className="bg-blue-50 rounded-lg px-5 py-3 text-center">
+
+                                                    <p className="text-xs text-gray-500">
+                                                        Reserved
+                                                    </p>
+
+                                                    <p className="text-2xl font-bold text-blue-600">
+                                                        {
+                                                            item.reservedUnits ||
+                                                            0
+                                                        }
+                                                    </p>
+
+                                                </div>
+
+                                                {/* EXPIRED */}
+
+                                                <div className="bg-gray-100 rounded-lg px-5 py-3 text-center">
+
+                                                    <p className="text-xs text-gray-500">
+                                                        Expired
+                                                    </p>
+
+                                                    <p className="text-2xl font-bold text-gray-600">
+                                                        {
+                                                            item.expiredUnits ||
+                                                            0
+                                                        }
+                                                    </p>
+
+                                                </div>
+
+                                                {/* MINIMUM */}
+
+                                                <div className="bg-yellow-50 rounded-lg px-5 py-3 text-center">
+
+                                                    <p className="text-xs text-gray-500">
+                                                        Minimum
+                                                    </p>
+
+                                                    <p className="text-2xl font-bold text-yellow-600">
+                                                        {
+                                                            item.minimumUnits ||
+                                                            0
+                                                        }
+                                                    </p>
+
+                                                </div>
+
+                                                {/* STATUS */}
 
                                                 <span
                                                     className={`px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(
@@ -1262,7 +1238,7 @@ function BloodStockManagementADm() {
                                                     }
                                                 </span>
 
-                                                {/* Actions */}
+                                                {/* ACTIONS */}
 
                                                 <div className="flex gap-2">
 
@@ -1290,15 +1266,13 @@ function BloodStockManagementADm() {
                                                         <FaTrash />
                                                     </button>
 
-                                                    {Number(
-                                                        item.units
-                                                    ) <=
-                                                        10 && (
+                                                    {status !==
+                                                        "Available" && (
 
                                                             <button
                                                                 onClick={() =>
                                                                     alert(
-                                                                        `Low stock alert for ${item.bloodGroup}`
+                                                                        `Blood stock alert for ${item.ownerName} - ${item.bloodGroup}`
                                                                     )
                                                                 }
                                                                 className="w-10 h-10 flex items-center justify-center bg-yellow-100 text-yellow-600 hover:bg-yellow-500 hover:text-white rounded-lg"
@@ -1310,6 +1284,28 @@ function BloodStockManagementADm() {
                                                         )}
 
                                                 </div>
+
+                                            </div>
+
+                                            {/* LAST UPDATED */}
+
+                                            <div className="mt-4 pt-3 border-t flex justify-between text-xs text-gray-400">
+
+                                                <span>
+                                                    Owner ID:{" "}
+                                                    {
+                                                        item.ownerId
+                                                    }
+                                                </span>
+
+                                                <span>
+                                                    Last updated:{" "}
+                                                    {item.lastUpdated
+                                                        ? new Date(
+                                                            item.lastUpdated
+                                                        ).toLocaleString()
+                                                        : "-"}
+                                                </span>
 
                                             </div>
 
@@ -1327,9 +1323,7 @@ function BloodStockManagementADm() {
 
             </div>
 
-            {/* =========================================
-                ADD / EDIT MODAL
-            ========================================= */}
+            {/* ADD / EDIT MODAL */}
 
             {showModal && (
 
@@ -1376,7 +1370,7 @@ function BloodStockManagementADm() {
                             className="p-6 space-y-5"
                         >
 
-                            {/* Blood Group */}
+                            {/* BLOOD GROUP */}
 
                             <div>
 
@@ -1423,7 +1417,63 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* Units */}
+                            {/* OWNER TYPE */}
+
+                            <div>
+
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Facility Type
+                                </label>
+
+                                <select
+                                    name="ownerType"
+                                    value={
+                                        formData.ownerType
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                    required
+                                    className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-500"
+                                >
+
+                                    <option value="Hospital">
+                                        Hospital
+                                    </option>
+
+                                    <option value="Blood Bank">
+                                        Blood Bank
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            {/* OWNER NAME */}
+
+                            <div>
+
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Hospital / Blood Bank
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="ownerName"
+                                    value={
+                                        formData.ownerName
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                    required
+                                    className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-500"
+                                    placeholder="Enter hospital or blood bank name"
+                                />
+
+                            </div>
+
+                            {/* AVAILABLE UNITS */}
 
                             <div>
 
@@ -1434,9 +1484,9 @@ function BloodStockManagementADm() {
                                 <input
                                     type="number"
                                     min="0"
-                                    name="units"
+                                    name="availableUnits"
                                     value={
-                                        formData.units
+                                        formData.availableUnits
                                     }
                                     onChange={
                                         handleChange
@@ -1448,7 +1498,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* Reserved */}
+                            {/* RESERVED */}
 
                             <div>
 
@@ -1472,7 +1522,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* Expired */}
+                            {/* EXPIRED */}
 
                             <div>
 
@@ -1496,65 +1546,32 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* Source */}
+                            {/* MINIMUM */}
 
                             <div>
 
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Hospital / Blood Bank
+                                    Minimum Required Units
                                 </label>
 
                                 <input
-                                    type="text"
-                                    name="hospital"
+                                    type="number"
+                                    min="0"
+                                    name="minimumUnits"
                                     value={
-                                        formData.hospital
+                                        formData.minimumUnits
                                     }
                                     onChange={
                                         handleChange
                                     }
+                                    required
                                     className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-500"
-                                    placeholder="Enter source name"
+                                    placeholder="Enter minimum units"
                                 />
 
                             </div>
 
-                            {/* Source Type */}
-
-                            <div>
-
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Source Type
-                                </label>
-
-                                <select
-                                    name="sourceType"
-                                    value={
-                                        formData.sourceType
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                    className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-red-500"
-                                >
-
-                                    <option value="Blood Bank">
-                                        Blood Bank
-                                    </option>
-
-                                    <option value="Hospital">
-                                        Hospital
-                                    </option>
-
-                                    <option value="Donation">
-                                        Donation
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                            {/* Date */}
+                            {/* DATE */}
 
                             <div>
 
@@ -1576,7 +1593,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* Buttons */}
+                            {/* BUTTONS */}
 
                             <div className="flex justify-end gap-3 pt-3">
 
