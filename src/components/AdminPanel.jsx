@@ -73,11 +73,11 @@ function AdminPanel() {
                 </Link>
 
                 <Link
-                    to="/bloodbank-managementAD"
+                    to="/donation-events-managementAD"
                     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
                 >
                     <FaHeartbeat />
-                    Blood Banks
+                    Donation Events
                 </Link>
 
                 <Link
@@ -105,11 +105,11 @@ function AdminPanel() {
                 </Link>
 
                 <Link
-                    to="/reports"
+                    to="/blood-stock-reports"
                     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-700 transition"
                 >
                     <FaChartBar />
-                    Reports
+                    Blood Stock Reports
                 </Link>
 
                 <Link

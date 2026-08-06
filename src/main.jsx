@@ -80,6 +80,7 @@ import ViewEmergencyRequests from "./pages/Hospital/EmergencyRequests";
 import RecipientEmergencyRequest from "./pages/Recipient/EmergencyRequests";
 import AdminEmergencyRequests from "./pages/Admin/EmergencyAD";
 import BloodStockManagementADm from "./pages/Admin/bloodStockManagement";
+import DonationEventManagementADm from "./pages/Admin/donationEventsManagementAD";
 
 
 
@@ -137,7 +138,10 @@ const router = createBrowserRouter([
   { path: "/user-management", element: <UserManagement /> },
   { path: "/admin-profile", element: <AdminProfile /> },
   {
-    path: "/blood-stock-managementAD", element: <BloodStockManagementADm />
+    path: "/blood-stock-reports", element: <BloodStockManagementADm />
+  },
+  {
+    path: "/donation-events-managementAD", element: <DonationEventManagementADm />
   },
 
   // Blood Bank

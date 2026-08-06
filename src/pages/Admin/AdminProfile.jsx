@@ -15,12 +15,23 @@ import {
 } from "react-icons/fa";
 import AdminPanel from "../../components/AdminPanel";
 
-const API_URL = "http://localhost:5000/admins";
+const API_URL = "https://blood-donation-backend-olwl.onrender.com/admin";
 
 function AdminProfile() {
     const [admin, setAdmin] = useState(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [showPasswordModal, setShowPasswordModal] =
+        useState(false);
+
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+    });
+
+    const [changingPassword, setChangingPassword] =
+        useState(false);
 
     // ==========================================
     // FETCH ADMIN
@@ -92,6 +103,90 @@ function AdminProfile() {
             );
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handlePasswordChange = (e) => {
+        const { name, value } = e.target;
+
+        setPasswordData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
+
+        const {
+            currentPassword,
+            newPassword,
+            confirmPassword,
+        } = passwordData;
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            alert("Please fill all password fields.");
+            return;
+        }
+
+        if (currentPassword !== admin.password) {
+            alert("Current password is incorrect.");
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            alert(
+                "New password must be at least 6 characters."
+            );
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            alert("New passwords do not match.");
+            return;
+        }
+
+        if (currentPassword === newPassword) {
+            alert(
+                "New password must be different from current password."
+            );
+            return;
+        }
+
+        try {
+            setChangingPassword(true);
+
+            const updatedAdmin = {
+                ...admin,
+                password: newPassword,
+            };
+
+            const response = await axios.put(
+                `${API_URL}/${admin.id}`,
+                updatedAdmin
+            );
+
+            setAdmin(response.data);
+
+            setPasswordData({
+                currentPassword: "",
+                newPassword: "",
+                confirmPassword: "",
+            });
+
+            setShowPasswordModal(false);
+
+            alert("Password changed successfully!");
+        } catch (error) {
+            console.error(
+                "Error changing password:",
+                error
+            );
+
+            alert("Unable to change password.");
+        } finally {
+            setChangingPassword(false);
         }
     };
 
@@ -410,15 +505,10 @@ function AdminProfile() {
 
                             <button
                                 type="button"
+                                onClick={() => setShowPasswordModal(true)}
                                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center gap-2 font-semibold"
-                                onClick={() =>
-                                    alert(
-                                        "Change password functionality can be added here."
-                                    )
-                                }
                             >
                                 <FaLock />
-
                                 Change Password
                             </button>
 
@@ -429,6 +519,177 @@ function AdminProfile() {
                 </div>
 
             </div>
+            {showPasswordModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+
+                        {/* Header */}
+
+                        <div className="flex justify-between items-center p-6 border-b">
+
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800">
+                                    Change Password
+                                </h2>
+
+                                <p className="text-sm text-gray-500 mt-1">
+                                    Update your administrator password.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setShowPasswordModal(false)
+                                }
+                                className="text-gray-500 hover:text-red-600 text-xl"
+                            >
+                                ✕
+                            </button>
+
+                        </div>
+
+                        {/* Form */}
+
+                        <form
+                            onSubmit={handleChangePassword}
+                            className="p-6 space-y-5"
+                        >
+
+                            {/* Current Password */}
+
+                            <div>
+
+                                <label className="block font-semibold text-gray-700 mb-2">
+                                    Current Password
+                                </label>
+
+                                <div className="flex items-center border rounded-lg px-3">
+
+                                    <FaLock className="text-gray-500" />
+
+                                    <input
+                                        type="password"
+                                        name="currentPassword"
+                                        value={
+                                            passwordData.currentPassword
+                                        }
+                                        onChange={
+                                            handlePasswordChange
+                                        }
+                                        placeholder="Enter current password"
+                                        className="w-full p-3 outline-none"
+                                    />
+
+                                </div>
+
+                            </div>
+
+                            {/* New Password */}
+
+                            <div>
+
+                                <label className="block font-semibold text-gray-700 mb-2">
+                                    New Password
+                                </label>
+
+                                <div className="flex items-center border rounded-lg px-3">
+
+                                    <FaLock className="text-gray-500" />
+
+                                    <input
+                                        type="password"
+                                        name="newPassword"
+                                        value={
+                                            passwordData.newPassword
+                                        }
+                                        onChange={
+                                            handlePasswordChange
+                                        }
+                                        placeholder="Enter new password"
+                                        className="w-full p-3 outline-none"
+                                    />
+
+                                </div>
+
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Minimum 6 characters
+                                </p>
+
+                            </div>
+
+                            {/* Confirm Password */}
+
+                            <div>
+
+                                <label className="block font-semibold text-gray-700 mb-2">
+                                    Confirm New Password
+                                </label>
+
+                                <div className="flex items-center border rounded-lg px-3">
+
+                                    <FaLock className="text-gray-500" />
+
+                                    <input
+                                        type="password"
+                                        name="confirmPassword"
+                                        value={
+                                            passwordData.confirmPassword
+                                        }
+                                        onChange={
+                                            handlePasswordChange
+                                        }
+                                        placeholder="Confirm new password"
+                                        className="w-full p-3 outline-none"
+                                    />
+
+                                </div>
+
+                            </div>
+
+                            {/* Buttons */}
+
+                            <div className="flex justify-end gap-3 pt-3">
+
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setShowPasswordModal(false)
+                                    }
+                                    className="px-5 py-3 bg-gray-200 rounded-lg font-semibold hover:bg-gray-300"
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    disabled={changingPassword}
+                                    className="px-5 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 disabled:bg-red-300 flex items-center gap-2"
+                                >
+
+                                    {changingPassword ? (
+                                        <>
+                                            <FaSyncAlt className="animate-spin" />
+                                            Updating...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaLock />
+                                            Change Password
+                                        </>
+                                    )}
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+            )}
         </div>
     );
 }

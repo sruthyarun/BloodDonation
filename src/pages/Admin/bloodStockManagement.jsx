@@ -640,6 +640,66 @@ function BloodStockManagementADm() {
         window.print();
     };
 
+    const generateStockLevelReport = () => {
+        const report = BLOOD_GROUPS.map((group) => {
+            const items = inventory.filter(
+                (item) =>
+                    item.bloodGroup === group
+            );
+
+            const available = items.reduce(
+                (sum, item) =>
+                    sum + Number(
+                        item.availableUnits ??
+                        item.units ??
+                        0
+                    ),
+                0
+            );
+
+            const reserved = items.reduce(
+                (sum, item) =>
+                    sum +
+                    Number(item.reservedUnits || 0),
+                0
+            );
+
+            const expired = items.reduce(
+                (sum, item) =>
+                    sum +
+                    Number(item.expiredUnits || 0),
+                0
+            );
+
+            const minimum = items.reduce(
+                (sum, item) =>
+                    sum +
+                    Number(item.minimumUnits || 10),
+                0
+            );
+
+            let status = "Available";
+
+            if (available === 0) {
+                status = "Out of Stock";
+            } else if (available <= 5) {
+                status = "Critical";
+            } else if (available < minimum) {
+                status = "Low Stock";
+            }
+
+            return {
+                bloodGroup: group,
+                available,
+                reserved,
+                expired,
+                minimum,
+                status,
+            };
+        });
+
+        return report;
+    };
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
@@ -975,6 +1035,205 @@ function BloodStockManagementADm() {
 
                             )
                         )}
+
+                    </div>
+
+                </div>
+                {/* =========================================
+    BLOOD STOCK LEVEL REPORT
+========================================= */}
+
+                <div className="bg-white rounded-2xl shadow-md p-6 mb-8">
+
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-800">
+                                Blood Stock Level Report
+                            </h2>
+
+                            <p className="text-gray-500 mt-1">
+                                Monitor available blood units against
+                                minimum stock levels.
+                            </p>
+                        </div>
+
+                        <button
+                            onClick={() => {
+                                const report =
+                                    generateStockLevelReport();
+
+                                const headers = [
+                                    "Blood Group",
+                                    "Available Units",
+                                    "Reserved Units",
+                                    "Expired Units",
+                                    "Minimum Units",
+                                    "Status",
+                                ];
+
+                                const rows = report.map(
+                                    (item) => [
+                                        item.bloodGroup,
+                                        item.available,
+                                        item.reserved,
+                                        item.expired,
+                                        item.minimum,
+                                        item.status,
+                                    ]
+                                );
+
+                                const csv = [
+                                    headers.join(","),
+                                    ...rows.map((row) =>
+                                        row.join(",")
+                                    ),
+                                ].join("\n");
+
+                                const blob = new Blob(
+                                    [csv],
+                                    {
+                                        type: "text/csv",
+                                    }
+                                );
+
+                                const url =
+                                    URL.createObjectURL(blob);
+
+                                const link =
+                                    document.createElement("a");
+
+                                link.href = url;
+
+                                link.download =
+                                    "blood-stock-level-report.csv";
+
+                                link.click();
+
+                                URL.revokeObjectURL(url);
+                            }}
+                            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg font-semibold"
+                        >
+                            <FaDownload />
+                            Export Stock Report
+                        </button>
+
+                    </div>
+
+                    <div className="overflow-x-auto">
+
+                        <table className="w-full">
+
+                            <thead>
+                                <tr className="border-b bg-gray-50">
+
+                                    <th className="text-left px-4 py-4">
+                                        Blood Group
+                                    </th>
+
+                                    <th className="text-center px-4 py-4">
+                                        Available
+                                    </th>
+
+                                    <th className="text-center px-4 py-4">
+                                        Reserved
+                                    </th>
+
+                                    <th className="text-center px-4 py-4">
+                                        Expired
+                                    </th>
+
+                                    <th className="text-center px-4 py-4">
+                                        Minimum
+                                    </th>
+
+                                    <th className="text-center px-4 py-4">
+                                        Stock Level
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {generateStockLevelReport().map(
+                                    (item) => (
+
+                                        <tr
+                                            key={item.bloodGroup}
+                                            className="border-b hover:bg-gray-50"
+                                        >
+
+                                            <td className="px-4 py-4">
+
+                                                <div className="flex items-center gap-3">
+
+                                                    <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+
+                                                        <FaTint className="text-red-600" />
+
+                                                    </div>
+
+                                                    <span className="font-bold text-gray-800">
+                                                        {item.bloodGroup}
+                                                    </span>
+
+                                                </div>
+
+                                            </td>
+
+                                            <td className="text-center px-4 py-4">
+
+                                                <span className="text-xl font-bold text-red-600">
+                                                    {item.available}
+                                                </span>
+
+                                            </td>
+
+                                            <td className="text-center px-4 py-4">
+
+                                                <span className="font-semibold text-blue-600">
+                                                    {item.reserved}
+                                                </span>
+
+                                            </td>
+
+                                            <td className="text-center px-4 py-4">
+
+                                                <span className="font-semibold text-gray-600">
+                                                    {item.expired}
+                                                </span>
+
+                                            </td>
+
+                                            <td className="text-center px-4 py-4">
+
+                                                <span className="font-semibold text-gray-700">
+                                                    {item.minimum}
+                                                </span>
+
+                                            </td>
+
+                                            <td className="text-center px-4 py-4">
+
+                                                <span
+                                                    className={`inline-flex px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(
+                                                        item.status
+                                                    )}`}
+                                                >
+                                                    {item.status}
+                                                </span>
+
+                                            </td>
+
+                                        </tr>
+
+                                    )
+                                )}
+
+                            </tbody>
+
+                        </table>
 
                     </div>
 
