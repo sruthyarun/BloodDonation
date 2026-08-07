@@ -21,14 +21,9 @@ function BloodBankPanel() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-
-    // Logged in blood bank user
-
     const user = useSelector(
         (state) => state.user.currentUser
     );
-
-
 
     const handleLogout = () => {
 
@@ -42,14 +37,9 @@ function BloodBankPanel() {
 
     };
 
-
-
     return (
 
         <aside className="w-64 min-h-screen bg-red-800 text-white p-6">
-
-
-            {/* Header */}
 
             <div className="mb-8">
 
@@ -57,12 +47,9 @@ function BloodBankPanel() {
                 <h1 className="text-2xl font-bold flex items-center gap-2">
 
                     <FaTint />
-
                     Blood Bank
 
                 </h1>
-
-
 
                 {
                     user && (
@@ -96,14 +83,7 @@ function BloodBankPanel() {
 
             </div>
 
-
-
-
-
             <nav className="space-y-5">
-
-
-                {/* Dashboard */}
 
                 <Link
 
@@ -119,12 +99,6 @@ function BloodBankPanel() {
 
                 </Link>
 
-
-
-
-
-                {/* Inventory */}
-
                 <Link
 
                     to="/bloodbank-inventory"
@@ -138,12 +112,6 @@ function BloodBankPanel() {
                     Blood Inventory
 
                 </Link>
-
-
-
-
-
-                {/* Blood Requests */}
 
                 <Link
 
@@ -159,9 +127,6 @@ function BloodBankPanel() {
 
                 </Link>
 
-
-                {/* Donor Management */}
-
                 <Link
 
                     to="/bloodbank-donor-management"
@@ -175,9 +140,6 @@ function BloodBankPanel() {
                     Donor Appointments
 
                 </Link>
-
-
-                {/* Emergency */}
 
                 <Link
 
@@ -193,12 +155,6 @@ function BloodBankPanel() {
 
                 </Link>
 
-
-
-
-
-                {/* Notifications */}
-
                 <Link
 
                     to="/bloodbank-notifications"
@@ -212,12 +168,6 @@ function BloodBankPanel() {
                     Notifications
 
                 </Link>
-
-
-
-
-
-                {/* Profile */}
 
                 <Link
 
@@ -233,12 +183,6 @@ function BloodBankPanel() {
 
                 </Link>
 
-
-
-
-
-                {/* Logout */}
-
                 <button
 
                     onClick={handleLogout}
@@ -252,9 +196,6 @@ function BloodBankPanel() {
                     Logout
 
                 </button>
-
-
-
             </nav>
 
 

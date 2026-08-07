@@ -82,12 +82,9 @@ function Reports() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* Sidebar */}
-
             <AdminPanel />
             <div className="min-h-screen bg-gray-100 p-8 flex-1">
 
-                {/* Header */}
 
                 <div className="flex justify-between items-center mb-8">
 
@@ -101,7 +98,7 @@ function Reports() {
                         </p>
                     </div>
 
-                    <div className="flex gap-3">
+                    {/* <div className="flex gap-3">
 
                         <button className="bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-lg flex items-center gap-2">
                             <FaFilePdf />
@@ -113,15 +110,14 @@ function Reports() {
                             Export Excel
                         </button>
 
-                    </div>
+                    </div> */}
 
                 </div>
 
-                {/* Cards */}
-                {/* Statistics Cards */}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                    {/* Total Donors */}
+
                     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex items-center gap-4">
                         <div className="bg-blue-100 text-blue-600 p-4 rounded-full">
                             <FaUsers className="text-3xl" />
@@ -134,7 +130,7 @@ function Reports() {
                         </div>
                     </div>
 
-                    {/* Total Recipients */}
+
                     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex items-center gap-4">
                         <div className="bg-green-100 text-green-600 p-4 rounded-full">
                             <FaUserInjured className="text-3xl" />
@@ -147,7 +143,7 @@ function Reports() {
                         </div>
                     </div>
 
-                    {/* Hospitals */}
+
                     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex items-center gap-4">
                         <div className="bg-red-100 text-red-600 p-4 rounded-full">
                             <FaHospital className="text-3xl" />
@@ -160,7 +156,7 @@ function Reports() {
                         </div>
                     </div>
 
-                    {/* Blood Units */}
+
                     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex items-center gap-4">
                         <div className="bg-pink-100 text-pink-600 p-4 rounded-full">
                             <FaTint className="text-3xl" />
@@ -173,7 +169,7 @@ function Reports() {
                         </div>
                     </div>
 
-                    {/* Appointments */}
+
                     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex items-center gap-4">
                         <div className="bg-indigo-100 text-indigo-600 p-4 rounded-full">
                             <FaCalendarAlt className="text-3xl" />
@@ -186,7 +182,7 @@ function Reports() {
                         </div>
                     </div>
 
-                    {/* Blood Requests */}
+
                     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex items-center gap-4">
                         <div className="bg-yellow-100 text-yellow-600 p-4 rounded-full">
                             <FaClipboardList className="text-3xl" />
@@ -199,7 +195,7 @@ function Reports() {
                         </div>
                     </div>
 
-                    {/* Emergency Requests */}
+
                     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex items-center gap-4">
                         <div className="bg-orange-100 text-orange-600 p-4 rounded-full">
                             <FaExclamationTriangle className="text-3xl" />
@@ -212,7 +208,7 @@ function Reports() {
                         </div>
                     </div>
 
-                    {/* Blood Banks */}
+
                     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex items-center gap-4">
                         <div className="bg-rose-100 text-rose-600 p-4 rounded-full">
                             <FaHospital className="text-3xl" />
@@ -227,7 +223,7 @@ function Reports() {
 
                 </div>
 
-                {/* Analytics */}
+
 
                 <div className="grid md:grid-cols-2 gap-6 mt-8">
 

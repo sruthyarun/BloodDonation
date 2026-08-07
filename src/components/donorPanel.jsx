@@ -21,7 +21,6 @@ function DonorPanel() {
     };
     return (
 
-
         <div className="w-64 bg-red-800 text-white p-6">
 
             <h1 className="text-2xl font-bold flex items-center gap-2 mb-10">

@@ -48,9 +48,6 @@ function AdminEmergencyRequests() {
 
         try {
 
-
-            // Update emergency request status
-
             await fetch(
                 `https://blood-donation-backend-olwl.onrender.com/emergencyRequests/${request.id}`,
                 {
@@ -68,9 +65,6 @@ function AdminEmergencyRequests() {
                 }
             );
 
-
-
-            // Add notification when approved
 
             if (status === "Approved") {
 

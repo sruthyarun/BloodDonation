@@ -25,10 +25,6 @@ const API_URL =
 
 function DonationEventManagementADm() {
 
-    // =====================================================
-    // STATE
-    // =====================================================
-
     const [events, setEvents] = useState([]);
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("All");
@@ -42,9 +38,6 @@ function DonationEventManagementADm() {
     const [editingEvent, setEditingEvent] = useState(null);
     const [selectedEvent, setSelectedEvent] = useState(null);
 
-    // =====================================================
-    // FORM
-    // =====================================================
 
     const initialForm = {
         title: "",
@@ -65,9 +58,6 @@ function DonationEventManagementADm() {
     const [formData, setFormData] =
         useState(initialForm);
 
-    // =====================================================
-    // FETCH EVENTS
-    // =====================================================
 
     useEffect(() => {
         fetchEvents();
@@ -99,9 +89,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // SEARCH + FILTER
-    // =====================================================
 
     const filteredEvents = useMemo(() => {
 
@@ -150,10 +137,6 @@ function DonationEventManagementADm() {
         typeFilter,
     ]);
 
-    // =====================================================
-    // DASHBOARD STATISTICS
-    // =====================================================
-
     const totalEvents = events.length;
 
     const upcomingEvents =
@@ -194,10 +177,6 @@ function DonationEventManagementADm() {
             0
         );
 
-    // =====================================================
-    // FORM CHANGE
-    // =====================================================
-
     const handleChange = (e) => {
 
         const { name, value } =
@@ -210,9 +189,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // OPEN ADD
-    // =====================================================
 
     const openAddModal = () => {
 
@@ -226,9 +202,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // OPEN EDIT
-    // =====================================================
 
     const openEditModal = (event) => {
 
@@ -267,9 +240,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // VIEW EVENT
-    // =====================================================
 
     const openViewModal = (event) => {
 
@@ -279,9 +249,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // ADD / UPDATE
-    // =====================================================
 
     const handleSubmit = async (e) => {
 
@@ -350,9 +317,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // DELETE
-    // =====================================================
 
     const deleteEvent = async (id) => {
 
@@ -388,10 +352,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // STATUS COLOR
-    // =====================================================
-
     const getStatusStyle = (status) => {
 
         switch (status) {
@@ -415,9 +375,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // EVENT TYPE COLOR
-    // =====================================================
 
     const getTypeStyle = (type) => {
 
@@ -433,9 +390,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // FORMAT DATE
-    // =====================================================
 
     const formatDate = (date) => {
 
@@ -455,10 +409,6 @@ function DonationEventManagementADm() {
         );
 
     };
-
-    // =====================================================
-    // REGISTRATION PERCENTAGE
-    // =====================================================
 
     const registrationPercentage = (
         event
@@ -489,10 +439,6 @@ function DonationEventManagementADm() {
 
     };
 
-    // =====================================================
-    // RETURN
-    // =====================================================
-
     return (
 
         <div className="min-h-screen bg-gray-100 flex">
@@ -500,10 +446,6 @@ function DonationEventManagementADm() {
             <AdminPanel />
 
             <div className="flex-1 p-8">
-
-                {/* =================================================
-                    HEADER
-                ================================================= */}
 
                 <div className="flex flex-col lg:flex-row justify-between gap-5 mb-8">
 
@@ -550,10 +492,6 @@ function DonationEventManagementADm() {
 
                 </div>
 
-                {/* =================================================
-                    SUMMARY CARDS
-                ================================================= */}
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
 
                     <SummaryCard
@@ -593,10 +531,6 @@ function DonationEventManagementADm() {
 
                 </div>
 
-                {/* =================================================
-                    SEARCH + FILTER
-                ================================================= */}
-
                 <div className="bg-white rounded-2xl shadow-md p-5 mb-8">
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -620,8 +554,6 @@ function DonationEventManagementADm() {
                             />
 
                         </div>
-
-                        {/* Status */}
 
                         <select
                             value={statusFilter}
@@ -655,8 +587,6 @@ function DonationEventManagementADm() {
 
                         </select>
 
-                        {/* Type */}
-
                         <select
                             value={typeFilter}
                             onChange={(e) =>
@@ -688,10 +618,6 @@ function DonationEventManagementADm() {
                     </div>
 
                 </div>
-
-                {/* =================================================
-                    EVENTS
-                ================================================= */}
 
                 {loading ? (
 
@@ -748,7 +674,6 @@ function DonationEventManagementADm() {
 
                                         <div className="flex flex-col xl:flex-row gap-6">
 
-                                            {/* Event Icon */}
 
                                             <div className="flex items-start">
 
@@ -760,7 +685,6 @@ function DonationEventManagementADm() {
 
                                             </div>
 
-                                            {/* Main Info */}
 
                                             <div className="flex-1">
 
@@ -832,7 +756,6 @@ function DonationEventManagementADm() {
 
                                                 </div>
 
-                                                {/* Type */}
 
                                                 <div className="mt-4">
 
@@ -848,7 +771,6 @@ function DonationEventManagementADm() {
 
                                                 </div>
 
-                                                {/* Registration */}
 
                                                 <div className="mt-5">
 
@@ -895,7 +817,6 @@ function DonationEventManagementADm() {
 
                                             </div>
 
-                                            {/* Actions */}
 
                                             <div className="flex xl:flex-col gap-2">
 
@@ -952,9 +873,6 @@ function DonationEventManagementADm() {
 
             </div>
 
-            {/* =====================================================
-                ADD / EDIT MODAL
-            ===================================================== */}
 
             {showModal && (
 
@@ -1028,7 +946,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Description */}
 
                                 <div className="md:col-span-2">
 
@@ -1051,7 +968,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Type */}
 
                                 <div>
 
@@ -1086,7 +1002,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Status */}
 
                                 <div>
 
@@ -1125,7 +1040,7 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Location */}
+
 
                                 <div>
 
@@ -1149,7 +1064,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Address */}
 
                                 <div>
 
@@ -1172,7 +1086,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Date */}
 
                                 <div>
 
@@ -1195,7 +1108,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Start Time */}
 
                                 <div>
 
@@ -1241,7 +1153,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Organizer */}
 
                                 <div>
 
@@ -1265,7 +1176,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Contact */}
 
                                 <div>
 
@@ -1288,7 +1198,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Expected Donors */}
 
                                 <div>
 
@@ -1312,7 +1221,6 @@ function DonationEventManagementADm() {
 
                                 </div>
 
-                                {/* Registered Donors */}
 
                                 <div>
 
@@ -1337,7 +1245,6 @@ function DonationEventManagementADm() {
 
                             </div>
 
-                            {/* Buttons */}
 
                             <div className="flex justify-end gap-3 pt-4 border-t">
 
@@ -1372,9 +1279,6 @@ function DonationEventManagementADm() {
 
             )}
 
-            {/* =====================================================
-                VIEW MODAL
-            ===================================================== */}
 
             {showViewModal &&
                 selectedEvent && (
@@ -1582,9 +1486,6 @@ function DonationEventManagementADm() {
 
 }
 
-// =====================================================
-// SUMMARY CARD
-// =====================================================
 
 function SummaryCard({
     title,
@@ -1668,9 +1569,6 @@ function SummaryCard({
 
 }
 
-// =====================================================
-// INFO ITEM
-// =====================================================
 
 function InfoItem({
     icon,
@@ -1704,9 +1602,6 @@ function InfoItem({
 
 }
 
-// =====================================================
-// DETAIL ITEM
-// =====================================================
 
 function DetailItem({
     label,

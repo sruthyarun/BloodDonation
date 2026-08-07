@@ -33,10 +33,6 @@ function AdminProfile() {
     const [changingPassword, setChangingPassword] =
         useState(false);
 
-    // ==========================================
-    // FETCH ADMIN
-    // ==========================================
-
     useEffect(() => {
         fetchAdmin();
     }, []);
@@ -60,9 +56,6 @@ function AdminProfile() {
         }
     };
 
-    // ==========================================
-    // HANDLE INPUT
-    // ==========================================
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -73,9 +66,6 @@ function AdminProfile() {
         }));
     };
 
-    // ==========================================
-    // SAVE PROFILE
-    // ==========================================
 
     const handleSave = async () => {
         if (!admin?.id) {
@@ -190,9 +180,6 @@ function AdminProfile() {
         }
     };
 
-    // ==========================================
-    // LOADING
-    // ==========================================
 
     if (loading) {
         return (
@@ -212,9 +199,6 @@ function AdminProfile() {
         );
     }
 
-    // ==========================================
-    // NO ADMIN
-    // ==========================================
 
     if (!admin) {
         return (
@@ -242,15 +226,9 @@ function AdminProfile() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* SIDEBAR */}
-
             <AdminPanel />
 
-            {/* MAIN CONTENT */}
-
             <div className="flex-1 p-8">
-
-                {/* HEADER */}
 
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-800">
@@ -264,10 +242,6 @@ function AdminProfile() {
                 </div>
 
                 <div className="grid lg:grid-cols-3 gap-8">
-
-                    {/* ==================================
-                        PROFILE CARD
-                    ================================== */}
 
                     <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
 
@@ -284,7 +258,6 @@ function AdminProfile() {
 
                         <div className="mt-8 space-y-5 text-left">
 
-                            {/* EMAIL */}
 
                             <div className="flex items-center gap-3">
                                 <FaEnvelope className="text-red-600" />
@@ -294,7 +267,6 @@ function AdminProfile() {
                                 </span>
                             </div>
 
-                            {/* PHONE */}
 
                             <div className="flex items-center gap-3">
                                 <FaPhoneAlt className="text-red-600" />
@@ -304,7 +276,6 @@ function AdminProfile() {
                                 </span>
                             </div>
 
-                            {/* DEPARTMENT */}
 
                             <div className="flex items-center gap-3">
                                 <FaBuilding className="text-red-600" />
@@ -314,7 +285,6 @@ function AdminProfile() {
                                 </span>
                             </div>
 
-                            {/* ADDRESS */}
 
                             <div className="flex items-center gap-3">
                                 <FaMapMarkerAlt className="text-red-600" />
@@ -323,8 +293,6 @@ function AdminProfile() {
                                     {admin.address}
                                 </span>
                             </div>
-
-                            {/* JOINED */}
 
                             <div className="flex items-center gap-3">
                                 <FaCalendarAlt className="text-red-600" />
@@ -339,10 +307,6 @@ function AdminProfile() {
 
                     </div>
 
-                    {/* ==================================
-                        EDIT FORM
-                    ================================== */}
-
                     <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-8">
 
                         <h2 className="text-2xl font-bold text-gray-800 mb-6">
@@ -351,7 +315,6 @@ function AdminProfile() {
 
                         <div className="grid md:grid-cols-2 gap-6">
 
-                            {/* NAME */}
 
                             <div>
                                 <label className="font-semibold text-gray-700">
@@ -375,7 +338,6 @@ function AdminProfile() {
                                 </div>
                             </div>
 
-                            {/* EMAIL */}
 
                             <div>
                                 <label className="font-semibold text-gray-700">
@@ -399,7 +361,6 @@ function AdminProfile() {
                                 </div>
                             </div>
 
-                            {/* PHONE */}
 
                             <div>
                                 <label className="font-semibold text-gray-700">
@@ -422,8 +383,6 @@ function AdminProfile() {
 
                                 </div>
                             </div>
-
-                            {/* DEPARTMENT */}
 
                             <div>
                                 <label className="font-semibold text-gray-700">
@@ -448,8 +407,6 @@ function AdminProfile() {
 
                                 </div>
                             </div>
-
-                            {/* ADDRESS */}
 
                             <div className="md:col-span-2">
 
@@ -479,9 +436,6 @@ function AdminProfile() {
 
                         </div>
 
-                        {/* ==================================
-                            BUTTONS
-                        ================================== */}
 
                         <div className="flex flex-wrap gap-4 mt-8">
 
@@ -550,14 +504,11 @@ function AdminProfile() {
 
                         </div>
 
-                        {/* Form */}
 
                         <form
                             onSubmit={handleChangePassword}
                             className="p-6 space-y-5"
                         >
-
-                            {/* Current Password */}
 
                             <div>
 
@@ -586,7 +537,6 @@ function AdminProfile() {
 
                             </div>
 
-                            {/* New Password */}
 
                             <div>
 
@@ -619,8 +569,6 @@ function AdminProfile() {
 
                             </div>
 
-                            {/* Confirm Password */}
-
                             <div>
 
                                 <label className="block font-semibold text-gray-700 mb-2">
@@ -647,8 +595,6 @@ function AdminProfile() {
                                 </div>
 
                             </div>
-
-                            {/* Buttons */}
 
                             <div className="flex justify-end gap-3 pt-3">
 

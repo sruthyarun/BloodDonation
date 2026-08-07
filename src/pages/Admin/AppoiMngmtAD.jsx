@@ -85,12 +85,9 @@ function AppointmentManagementADm() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* Sidebar */}
-
             <AdminPanel />
             <div className="min-h-screen bg-gray-100 p-8 flex-1">
 
-                {/* Header */}
 
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8">
 
@@ -116,7 +113,6 @@ function AppointmentManagementADm() {
 
                 </div>
 
-                {/* Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-600">
@@ -149,10 +145,6 @@ function AppointmentManagementADm() {
 
                 </div>
 
-                {/* Table */}
-
-                {/* Appointment Cards */}
-
                 <div className="space-y-5">
 
                     {filteredAppointments.map((appointment) => (
@@ -164,7 +156,6 @@ function AppointmentManagementADm() {
 
                             <div className="flex flex-col lg:flex-row justify-between gap-6">
 
-                                {/* Left Side */}
 
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-5 flex-1">
 
@@ -257,8 +248,6 @@ function AppointmentManagementADm() {
                                     </div>
 
                                 </div>
-
-                                {/* Right Side */}
 
                                 <div className="flex lg:flex-col justify-center gap-3">
 

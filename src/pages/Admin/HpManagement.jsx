@@ -26,9 +26,6 @@ function HospitalManagementADm() {
     const [selectedHospital, setSelectedHospital] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // ==============================
-    // FETCH HOSPITALS
-    // ==============================
 
     useEffect(() => {
         fetchHospitals();
@@ -48,9 +45,6 @@ function HospitalManagementADm() {
         }
     };
 
-    // ==============================
-    // SEARCH
-    // ==============================
 
     const filteredHospitals = useMemo(() => {
         const searchValue = search.toLowerCase().trim();
@@ -81,9 +75,6 @@ function HospitalManagementADm() {
         );
     }, [hospitals, search]);
 
-    // ==============================
-    // STATISTICS
-    // ==============================
 
     const totalHospitals = hospitals.length;
 
@@ -103,9 +94,6 @@ function HospitalManagementADm() {
         (hospital) => hospital.status === "Blocked"
     ).length;
 
-    // ==============================
-    // UPDATE STATUS
-    // ==============================
 
     const updateStatus = async (id, status) => {
         try {
@@ -133,9 +121,6 @@ function HospitalManagementADm() {
         }
     };
 
-    // ==============================
-    // DELETE HOSPITAL
-    // ==============================
 
     const deleteHospital = async (id) => {
         const confirmDelete = window.confirm(
@@ -157,17 +142,11 @@ function HospitalManagementADm() {
         }
     };
 
-    // ==============================
-    // VIEW PROFILE
-    // ==============================
 
     const viewHospital = (hospital) => {
         setSelectedHospital(hospital);
     };
 
-    // ==============================
-    // STATUS STYLE
-    // ==============================
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -191,17 +170,10 @@ function HospitalManagementADm() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* ==============================
-                ADMIN SIDEBAR
-            ============================== */}
-
             <AdminPanel />
 
             <div className="min-h-screen bg-gray-100 p-8 flex-1">
 
-                {/* ==============================
-                    HEADER
-                ============================== */}
 
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8">
 
@@ -216,7 +188,7 @@ function HospitalManagementADm() {
                         </p>
                     </div>
 
-                    {/* Search */}
+
 
                     <div className="flex items-center bg-white shadow rounded-lg px-4 py-3 mt-4 md:mt-0 w-full md:w-80">
 
@@ -236,13 +208,9 @@ function HospitalManagementADm() {
 
                 </div>
 
-                {/* ==============================
-                    SUMMARY CARDS
-                ============================== */}
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
 
-                    {/* Total */}
+
 
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-600">
 
@@ -256,7 +224,6 @@ function HospitalManagementADm() {
 
                     </div>
 
-                    {/* Approved */}
 
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-600">
 
@@ -270,8 +237,6 @@ function HospitalManagementADm() {
 
                     </div>
 
-                    {/* Pending */}
-
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
 
                         <h2 className="text-gray-500">
@@ -284,7 +249,6 @@ function HospitalManagementADm() {
 
                     </div>
 
-                    {/* Rejected */}
 
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
 
@@ -297,8 +261,6 @@ function HospitalManagementADm() {
                         </p>
 
                     </div>
-
-                    {/* Blocked */}
 
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-gray-600">
 
@@ -314,10 +276,6 @@ function HospitalManagementADm() {
 
                 </div>
 
-                {/* ==============================
-                    HOSPITAL LIST
-                    DIV FORMAT - NO TABLE
-                ============================== */}
 
                 <div className="space-y-4">
 
@@ -354,9 +312,7 @@ function HospitalManagementADm() {
 
                                 <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
 
-                                    {/* ==============================
-                                        HOSPITAL INFORMATION
-                                    ============================== */}
+
 
                                     <div className="flex items-center gap-4 flex-1">
 
@@ -416,9 +372,7 @@ function HospitalManagementADm() {
 
                                     </div>
 
-                                    {/* ==============================
-                                        HOSPITAL TYPE / LICENSE
-                                    ============================== */}
+
 
                                     <div className="flex flex-wrap gap-3">
 
@@ -452,15 +406,12 @@ function HospitalManagementADm() {
 
                                     </div>
 
-                                    {/* ==============================
-                                        ACTIONS
-                                    ============================== */}
+
 
                                     <div className="flex justify-end w-full xl:w-auto">
 
                                         <div className="flex items-center gap-2">
 
-                                            {/* VIEW */}
 
                                             <button
                                                 onClick={() =>
@@ -474,7 +425,7 @@ function HospitalManagementADm() {
                                                 <FaEye />
                                             </button>
 
-                                            {/* APPROVE */}
+
 
                                             {hospital.status ===
                                                 "Pending" && (
@@ -494,7 +445,7 @@ function HospitalManagementADm() {
 
                                                 )}
 
-                                            {/* REJECT */}
+
 
                                             {hospital.status ===
                                                 "Pending" && (
@@ -514,7 +465,7 @@ function HospitalManagementADm() {
 
                                                 )}
 
-                                            {/* BLOCK */}
+
 
                                             {hospital.status !==
                                                 "Blocked" &&
@@ -536,7 +487,7 @@ function HospitalManagementADm() {
 
                                                 )}
 
-                                            {/* UNBLOCK */}
+
 
                                             {hospital.status ===
                                                 "Blocked" && (
@@ -556,7 +507,7 @@ function HospitalManagementADm() {
 
                                                 )}
 
-                                            {/* DELETE */}
+
 
                                             <button
                                                 onClick={() =>
@@ -586,9 +537,7 @@ function HospitalManagementADm() {
 
             </div>
 
-            {/* ==============================
-                HOSPITAL PROFILE MODAL
-            ============================== */}
+
 
             {selectedHospital && (
 
@@ -596,7 +545,6 @@ function HospitalManagementADm() {
 
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 
-                        {/* Modal Header */}
 
                         <div className="flex justify-between items-center p-6 border-b">
 
@@ -624,11 +572,8 @@ function HospitalManagementADm() {
 
                         </div>
 
-                        {/* Profile Content */}
 
                         <div className="p-6">
-
-                            {/* Profile Header */}
 
                             <div className="flex items-center gap-4 mb-6">
 
@@ -656,8 +601,6 @@ function HospitalManagementADm() {
                                 </div>
 
                             </div>
-
-                            {/* Hospital Details */}
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
@@ -726,8 +669,6 @@ function HospitalManagementADm() {
 
                             </div>
 
-                            {/* Address */}
-
                             <div className="mt-4">
 
                                 <ProfileItem
@@ -738,8 +679,6 @@ function HospitalManagementADm() {
                                 />
 
                             </div>
-
-                            {/* Status */}
 
                             <div className="mt-6 p-4 bg-gray-50 rounded-xl">
 
@@ -759,10 +698,6 @@ function HospitalManagementADm() {
                                 </span>
 
                             </div>
-
-                            {/* ==============================
-                                ADMIN ACTIONS
-                            ============================== */}
 
                             <div className="flex flex-wrap gap-3 mt-6">
 
@@ -786,7 +721,6 @@ function HospitalManagementADm() {
 
                                     )}
 
-                                {/* REJECT */}
 
                                 {selectedHospital.status ===
                                     "Pending" && (
@@ -806,8 +740,6 @@ function HospitalManagementADm() {
 
                                     )}
 
-                                {/* BLOCK */}
-
                                 {selectedHospital.status ===
                                     "Approved" && (
 
@@ -826,7 +758,6 @@ function HospitalManagementADm() {
 
                                     )}
 
-                                {/* UNBLOCK */}
 
                                 {selectedHospital.status ===
                                     "Blocked" && (
@@ -846,7 +777,6 @@ function HospitalManagementADm() {
 
                                     )}
 
-                                {/* DELETE */}
 
                                 <button
                                     onClick={() =>
@@ -874,9 +804,6 @@ function HospitalManagementADm() {
     );
 }
 
-// ==============================
-// PROFILE ITEM
-// ==============================
 
 function ProfileItem({ label, value }) {
     return (

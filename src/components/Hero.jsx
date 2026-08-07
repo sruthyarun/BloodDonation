@@ -39,13 +39,7 @@ function Hero() {
                             </button>
                         </div>
                     </div>
-                    <div className="bg-red-50 overflow-hidden shadow-lg">
-                        {/* <img
-                            src={hero}
-                            alt="Hero"
-                            className=" w-full h-full opacity-40 object-cover object-center transition-transform duration-500 transform hover:scale-105"
-                        /> */}
-                    </div>
+
                 </div>
             </div >
         </section >

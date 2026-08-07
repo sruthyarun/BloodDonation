@@ -86,12 +86,8 @@ function NotificationsADm() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* Sidebar */}
-
             <AdminPanel />
             <div className="min-h-screen bg-gray-100 p-8 flex-1">
-
-                {/* Header */}
 
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8">
 
@@ -126,9 +122,6 @@ function NotificationsADm() {
 
                 </div>
 
-
-
-                {/* Notifications */}
 
                 < div className="space-y-5" >
 

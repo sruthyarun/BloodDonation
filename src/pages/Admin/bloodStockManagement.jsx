@@ -57,9 +57,6 @@ function BloodStockManagementADm() {
             .split("T")[0],
     });
 
-    // =====================================================
-    // FETCH ALL BLOOD STOCK
-    // =====================================================
 
     useEffect(() => {
         fetchInventory();
@@ -82,9 +79,6 @@ function BloodStockManagementADm() {
         }
     };
 
-    // =====================================================
-    // SEARCH
-    // =====================================================
 
     const filteredInventory = useMemo(() => {
         const value = search.toLowerCase().trim();
@@ -108,9 +102,7 @@ function BloodStockManagementADm() {
         );
     }, [inventory, search]);
 
-    // =====================================================
-    // STATUS
-    // =====================================================
+
 
     const getStatus = (
         availableUnits,
@@ -158,10 +150,6 @@ function BloodStockManagementADm() {
         }
     };
 
-    // =====================================================
-    // DASHBOARD CALCULATIONS
-    // =====================================================
-
     const totalUnits = inventory.reduce(
         (sum, item) =>
             sum +
@@ -207,9 +195,6 @@ function BloodStockManagementADm() {
             ) === "Out of Stock"
     ).length;
 
-    // =====================================================
-    // HOSPITAL / BLOOD BANK COUNTS
-    // =====================================================
 
     const hospitals = inventory.filter(
         (item) =>
@@ -222,9 +207,7 @@ function BloodStockManagementADm() {
             item.ownerType === "Blood Bank"
     ).length;
 
-    // =====================================================
-    // BLOOD GROUP TOTALS
-    // =====================================================
+
 
     const bloodGroupStock = BLOOD_GROUPS.map(
         (group) => {
@@ -273,10 +256,6 @@ function BloodStockManagementADm() {
         }
     );
 
-    // =====================================================
-    // RECEIVED BLOOD
-    // =====================================================
-
     const receivedUnits = inventory.reduce(
         (sum, item) =>
             sum +
@@ -286,9 +265,6 @@ function BloodStockManagementADm() {
         0
     );
 
-    // =====================================================
-    // ISSUED BLOOD
-    // =====================================================
 
     const issuedUnits = inventory.reduce(
         (sum, item) =>
@@ -299,9 +275,7 @@ function BloodStockManagementADm() {
         0
     );
 
-    // =====================================================
-    // FORM CHANGE
-    // =====================================================
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -312,9 +286,7 @@ function BloodStockManagementADm() {
         }));
     };
 
-    // =====================================================
-    // OPEN ADD
-    // =====================================================
+
 
     const openAddModal = () => {
         setEditingItem(null);
@@ -335,9 +307,7 @@ function BloodStockManagementADm() {
         setShowModal(true);
     };
 
-    // =====================================================
-    // OPEN EDIT
-    // =====================================================
+
 
     const openEditModal = (item) => {
         setEditingItem(item);
@@ -375,9 +345,7 @@ function BloodStockManagementADm() {
         setShowModal(true);
     };
 
-    // =====================================================
-    // ADD / UPDATE STOCK
-    // =====================================================
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -463,9 +431,7 @@ function BloodStockManagementADm() {
         }
     };
 
-    // =====================================================
-    // DELETE
-    // =====================================================
+
 
     const deleteStock = async (id) => {
         if (
@@ -494,9 +460,7 @@ function BloodStockManagementADm() {
         }
     };
 
-    // =====================================================
-    // CSV REPORT
-    // =====================================================
+
 
     const generateReport = () => {
         let data = [];
@@ -632,9 +596,6 @@ function BloodStockManagementADm() {
         URL.revokeObjectURL(url);
     };
 
-    // =====================================================
-    // PRINT
-    // =====================================================
 
     const printReport = () => {
         window.print();
@@ -707,7 +668,6 @@ function BloodStockManagementADm() {
 
             <div className="flex-1 p-8">
 
-                {/* HEADER */}
 
                 <div className="flex flex-col lg:flex-row justify-between gap-5 mb-8">
 
@@ -756,8 +716,6 @@ function BloodStockManagementADm() {
                     </div>
 
                 </div>
-
-                {/* SUMMARY */}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-5 mb-8">
 
@@ -808,8 +766,6 @@ function BloodStockManagementADm() {
                     />
 
                 </div>
-
-                {/* FACILITY SUMMARY */}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
@@ -873,7 +829,6 @@ function BloodStockManagementADm() {
 
                 </div>
 
-                {/* RECEIVED / ISSUED */}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
@@ -934,8 +889,6 @@ function BloodStockManagementADm() {
                     </div>
 
                 </div>
-
-                {/* BLOOD GROUP STOCK */}
 
                 <div className="mb-8">
 
@@ -1039,9 +992,6 @@ function BloodStockManagementADm() {
                     </div>
 
                 </div>
-                {/* =========================================
-    BLOOD STOCK LEVEL REPORT
-========================================= */}
 
                 <div className="bg-white rounded-2xl shadow-md p-6 mb-8">
 
@@ -1239,7 +1189,6 @@ function BloodStockManagementADm() {
 
                 </div>
 
-                {/* ALERTS */}
 
                 {(lowStock > 0 ||
                     critical > 0 ||
@@ -1274,7 +1223,6 @@ function BloodStockManagementADm() {
 
                     )}
 
-                {/* REPORTS */}
 
                 <div className="bg-white rounded-2xl shadow-md p-6 mb-8">
 
@@ -1366,8 +1314,6 @@ function BloodStockManagementADm() {
                     </div>
 
                 </div>
-
-                {/* RECENT STOCK UPDATES */}
 
                 <div className="mb-8">
 
@@ -1502,7 +1448,6 @@ function BloodStockManagementADm() {
 
                 </div>
 
-                {/* INVENTORY LIST */}
 
                 <div>
 
@@ -1613,7 +1558,6 @@ function BloodStockManagementADm() {
 
                                                 </div>
 
-                                                {/* OWNER */}
 
                                                 <div className="min-w-56">
 
@@ -1645,8 +1589,6 @@ function BloodStockManagementADm() {
 
                                                 </div>
 
-                                                {/* AVAILABLE */}
-
                                                 <div className="bg-red-50 rounded-lg px-5 py-3 text-center">
 
                                                     <p className="text-xs text-gray-500">
@@ -1661,7 +1603,6 @@ function BloodStockManagementADm() {
 
                                                 </div>
 
-                                                {/* RESERVED */}
 
                                                 <div className="bg-blue-50 rounded-lg px-5 py-3 text-center">
 
@@ -1678,7 +1619,6 @@ function BloodStockManagementADm() {
 
                                                 </div>
 
-                                                {/* EXPIRED */}
 
                                                 <div className="bg-gray-100 rounded-lg px-5 py-3 text-center">
 
@@ -1695,7 +1635,6 @@ function BloodStockManagementADm() {
 
                                                 </div>
 
-                                                {/* MINIMUM */}
 
                                                 <div className="bg-yellow-50 rounded-lg px-5 py-3 text-center">
 
@@ -1712,7 +1651,6 @@ function BloodStockManagementADm() {
 
                                                 </div>
 
-                                                {/* STATUS */}
 
                                                 <span
                                                     className={`px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(
@@ -1724,7 +1662,6 @@ function BloodStockManagementADm() {
                                                     }
                                                 </span>
 
-                                                {/* ACTIONS */}
 
                                                 <div className="flex gap-2">
 
@@ -1773,7 +1710,6 @@ function BloodStockManagementADm() {
 
                                             </div>
 
-                                            {/* LAST UPDATED */}
 
                                             <div className="mt-4 pt-3 border-t flex justify-between text-xs text-gray-400">
 
@@ -1809,7 +1745,6 @@ function BloodStockManagementADm() {
 
             </div>
 
-            {/* ADD / EDIT MODAL */}
 
             {showModal && (
 
@@ -1856,7 +1791,6 @@ function BloodStockManagementADm() {
                             className="p-6 space-y-5"
                         >
 
-                            {/* BLOOD GROUP */}
 
                             <div>
 
@@ -1903,7 +1837,6 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* OWNER TYPE */}
 
                             <div>
 
@@ -1935,7 +1868,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* OWNER NAME */}
+
 
                             <div>
 
@@ -1959,7 +1892,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* AVAILABLE UNITS */}
+
 
                             <div>
 
@@ -1984,7 +1917,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* RESERVED */}
+
 
                             <div>
 
@@ -2008,7 +1941,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* EXPIRED */}
+
 
                             <div>
 
@@ -2032,7 +1965,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* MINIMUM */}
+
 
                             <div>
 
@@ -2057,7 +1990,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* DATE */}
+
 
                             <div>
 
@@ -2079,7 +2012,7 @@ function BloodStockManagementADm() {
 
                             </div>
 
-                            {/* BUTTONS */}
+
 
                             <div className="flex justify-end gap-3 pt-3">
 
@@ -2118,9 +2051,7 @@ function BloodStockManagementADm() {
     );
 }
 
-// =====================================================
-// SUMMARY CARD
-// =====================================================
+
 
 function SummaryCard({
     title,

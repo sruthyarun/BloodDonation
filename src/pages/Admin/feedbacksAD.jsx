@@ -28,9 +28,6 @@ function FeedbackManagementADm() {
     const [selectedFeedback, setSelectedFeedback] =
         useState(null);
 
-    // =====================================================
-    // FETCH FEEDBACK
-    // =====================================================
 
     useEffect(() => {
         fetchFeedback();
@@ -52,10 +49,6 @@ function FeedbackManagementADm() {
             setLoading(false);
         }
     };
-
-    // =====================================================
-    // SEARCH + FILTER
-    // =====================================================
 
     const filteredFeedback = useMemo(() => {
         const searchValue = search
@@ -91,9 +84,7 @@ function FeedbackManagementADm() {
             });
     }, [feedback, search, statusFilter]);
 
-    // =====================================================
-    // COUNTS
-    // =====================================================
+
 
     const totalFeedback = feedback.length;
 
@@ -107,9 +98,6 @@ function FeedbackManagementADm() {
             item.status?.toLowerCase() === "read"
     ).length;
 
-    // =====================================================
-    // MARK AS READ
-    // =====================================================
 
     const markAsRead = async (item) => {
         try {
@@ -152,9 +140,6 @@ function FeedbackManagementADm() {
         }
     };
 
-    // =====================================================
-    // DELETE
-    // =====================================================
 
     const deleteFeedback = async (id) => {
         const confirmed = window.confirm(
@@ -193,9 +178,7 @@ function FeedbackManagementADm() {
         }
     };
 
-    // =====================================================
-    // DATE FORMAT
-    // =====================================================
+
 
     const formatDate = (date) => {
         if (!date) {
@@ -214,9 +197,6 @@ function FeedbackManagementADm() {
         );
     };
 
-    // =====================================================
-    // STATUS STYLE
-    // =====================================================
 
     const getStatusStyle = (status) => {
         if (
@@ -231,17 +211,9 @@ function FeedbackManagementADm() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* ADMIN SIDEBAR */}
-
             <AdminPanel />
 
-            {/* MAIN CONTENT */}
-
             <div className="flex-1 p-6 lg:p-8">
-
-                {/* =========================================
-                    HEADER
-                ========================================= */}
 
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-8">
 
@@ -273,9 +245,6 @@ function FeedbackManagementADm() {
 
                 </div>
 
-                {/* =========================================
-                    SUMMARY CARDS
-                ========================================= */}
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
 
@@ -302,15 +271,12 @@ function FeedbackManagementADm() {
 
                 </div>
 
-                {/* =========================================
-                    SEARCH + FILTER
-                ========================================= */}
 
                 <div className="bg-white rounded-2xl shadow-md p-5 mb-6">
 
                     <div className="flex flex-col lg:flex-row gap-4">
 
-                        {/* SEARCH */}
+
 
                         <div className="flex items-center border border-gray-300 rounded-lg px-4 py-3 flex-1">
 
@@ -330,7 +296,7 @@ function FeedbackManagementADm() {
 
                         </div>
 
-                        {/* STATUS FILTER */}
+
 
                         <select
                             value={statusFilter}
@@ -357,10 +323,6 @@ function FeedbackManagementADm() {
                     </div>
 
                 </div>
-
-                {/* =========================================
-                    FEEDBACK LIST
-                ========================================= */}
 
                 {loading ? (
 
@@ -411,7 +373,6 @@ function FeedbackManagementADm() {
 
                                     <div className="flex flex-col xl:flex-row gap-6">
 
-                                        {/* USER */}
 
                                         <div className="flex items-start gap-4 flex-1">
 
@@ -468,7 +429,6 @@ function FeedbackManagementADm() {
 
                                         </div>
 
-                                        {/* SUBJECT */}
 
                                         <div className="xl:w-64">
 
@@ -485,7 +445,6 @@ function FeedbackManagementADm() {
 
                                         </div>
 
-                                        {/* DATE */}
 
                                         <div className="xl:w-52">
 
@@ -504,7 +463,6 @@ function FeedbackManagementADm() {
 
                                     </div>
 
-                                    {/* MESSAGE */}
 
                                     <div className="mt-5 bg-gray-50 rounded-xl p-4">
 
@@ -520,7 +478,6 @@ function FeedbackManagementADm() {
 
                                     </div>
 
-                                    {/* ACTIONS */}
 
                                     <div className="flex flex-wrap justify-end gap-3 mt-5">
 
@@ -579,17 +536,12 @@ function FeedbackManagementADm() {
 
             </div>
 
-            {/* =========================================
-                VIEW FEEDBACK MODAL
-            ========================================= */}
-
             {selectedFeedback && (
 
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 
-                        {/* MODAL HEADER */}
 
                         <div className="flex items-center justify-between p-6 border-b">
 
@@ -619,7 +571,6 @@ function FeedbackManagementADm() {
 
                         </div>
 
-                        {/* MODAL BODY */}
 
                         <div className="p-6 space-y-5">
 
@@ -736,7 +687,6 @@ function FeedbackManagementADm() {
 
                         </div>
 
-                        {/* MODAL FOOTER */}
 
                         <div className="flex justify-end gap-3 p-6 border-t">
 
@@ -793,9 +743,6 @@ function FeedbackManagementADm() {
     );
 }
 
-// =====================================================
-// SUMMARY CARD
-// =====================================================
 
 function SummaryCard({
     title,

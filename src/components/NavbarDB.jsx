@@ -16,7 +16,6 @@ function NavbarDB({ notificationCount }) {
     return (
         <nav className="bg-white shadow-md px-8 py-4 flex justify-between items-center">
 
-            {/* Left */}
             <div className="flex items-center gap-4">
 
                 <img
@@ -41,10 +40,8 @@ function NavbarDB({ notificationCount }) {
 
             </div>
 
-            {/* Right */}
             <div className="flex items-center gap-6">
 
-                {/* Notification */}
                 <div className="relative cursor-pointer">
 
                     <FaBell className="text-2xl text-red-600" />
@@ -57,7 +54,6 @@ function NavbarDB({ notificationCount }) {
 
                 </div>
 
-                {/* Logout */}
                 <button
                     onClick={handleLogout}
                     className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"

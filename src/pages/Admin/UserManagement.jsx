@@ -76,7 +76,7 @@ function UserManagement() {
     return (
         <div className="min-h-screen bg-gray-100 p-8">
 
-            {/* Header */}
+
             <div className="flex flex-col md:flex-row justify-between items-center mb-8">
 
                 <div>
@@ -99,7 +99,7 @@ function UserManagement() {
 
             </div>
 
-            {/* Dashboard Cards */}
+
 
             <div className="grid md:grid-cols-5 gap-5 mb-8">
 
@@ -130,7 +130,7 @@ function UserManagement() {
 
             </div>
 
-            {/* User Table */}
+
 
             <div className="bg-white rounded-xl shadow-lg overflow-x-auto">
 

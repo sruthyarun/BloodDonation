@@ -21,8 +21,6 @@ function Footer() {
 
                 <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-12">
 
-                    {/* Logo */}
-
                     <div>
 
                         <div className="flex items-center gap-3">
@@ -42,8 +40,6 @@ function Footer() {
 
 
                     </div>
-
-                    {/* Quick Links */}
 
                     <div>
 
@@ -82,7 +78,6 @@ function Footer() {
 
                     </div>
 
-                    {/* Contact */}
 
                     <div>
 
@@ -126,7 +121,6 @@ function Footer() {
 
                     </div>
 
-                    {/* Social */}
 
                     <div>
 

@@ -96,10 +96,7 @@ function AdminDashboard() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* Sidebar */}
-
             <AdminPanel />
-            {/* Main Content */}
 
             <main className="flex-1 p-8">
 
@@ -114,7 +111,6 @@ function AdminDashboard() {
                     </p>
 
                 </div>
-                {/* Statistics Cards */}
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 
@@ -152,7 +148,6 @@ function AdminDashboard() {
 
                 </div>
 
-                {/* Second Row */}
 
                 <div className="grid md:grid-cols-3 gap-6 mt-8">
 
@@ -198,9 +193,6 @@ function AdminDashboard() {
 
                 </div>
 
-
-
-                {/* Recent Activities */}
 
                 < div className="mt-10" >
 

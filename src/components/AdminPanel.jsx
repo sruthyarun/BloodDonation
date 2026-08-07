@@ -31,7 +31,6 @@ function AdminPanel() {
     return (
         <aside className="w-64 min-h-screen bg-red-800 text-white shadow-xl">
 
-            {/* Logo */}
             <div className="p-6 border-b border-red-700">
                 <h1 className="text-2xl font-bold text-center">
                     Admin Panel

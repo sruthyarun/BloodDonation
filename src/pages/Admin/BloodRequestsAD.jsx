@@ -86,12 +86,8 @@ function BloodRequestsADm() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-
-
             <AdminPanel />
             <div className="min-h-screen bg-gray-100 p-8 flex-1">
-
-                {/* Header */}
 
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8">
 
@@ -117,9 +113,6 @@ function BloodRequestsADm() {
                     </div>
 
                 </div>
-
-                {/* Dashboard Cards */}
-                {/* Dashboard Cards */}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
@@ -153,8 +146,6 @@ function BloodRequestsADm() {
 
                 </div>
 
-
-                {/* Requests Table */}
 
                 <div className="bg-white rounded-xl shadow-lg overflow-x-auto">
 

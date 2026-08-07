@@ -42,8 +42,6 @@ function WhyDonate() {
 
             <div className="max-w-7xl mx-auto px-6">
 
-                {/* Heading */}
-
                 <div className="text-center">
 
                     <span className="text-red-600 font-semibold uppercase tracking-widest">
@@ -60,8 +58,6 @@ function WhyDonate() {
                     </p>
 
                 </div>
-
-                {/* Cards */}
 
                 <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8 mt-16">
 

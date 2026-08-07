@@ -25,7 +25,6 @@ function DonorManagementADm() {
     const API_URL =
         "https://blood-donation-backend-olwl.onrender.com/donors";
 
-    // Fetch donors
     useEffect(() => {
         fetchDonors();
     }, []);
@@ -44,7 +43,6 @@ function DonorManagementADm() {
         }
     };
 
-    // Search donors
     const filteredDonors = useMemo(() => {
         const searchValue = search.toLowerCase().trim();
 
@@ -58,7 +56,7 @@ function DonorManagementADm() {
         );
     }, [donors, search]);
 
-    // Dashboard statistics
+
     const totalDonors = donors.length;
 
     const approvedCount = donors.filter(
@@ -77,7 +75,7 @@ function DonorManagementADm() {
         (donor) => donor.eligibility === "Eligible"
     ).length;
 
-    // Update donor status
+
     const updateStatus = async (id, status) => {
         try {
             const donor = donors.find((item) => item.id === id);
@@ -91,7 +89,7 @@ function DonorManagementADm() {
 
             fetchDonors();
 
-            // Update selected donor if modal is open
+
             if (selectedDonor?.id === id) {
                 setSelectedDonor({
                     ...donor,
@@ -103,7 +101,7 @@ function DonorManagementADm() {
         }
     };
 
-    // Delete donor
+
     const deleteDonor = async (id) => {
         const confirmDelete = window.confirm(
             "Are you sure you want to delete this donor?"
@@ -124,7 +122,7 @@ function DonorManagementADm() {
         }
     };
 
-    // Open donor profile
+
     const viewDonor = (donor) => {
         setSelectedDonor(donor);
     };
@@ -132,12 +130,10 @@ function DonorManagementADm() {
     return (
         <div className="min-h-screen bg-gray-100 flex">
 
-            {/* Admin Sidebar */}
             <AdminPanel />
 
             <div className="min-h-screen bg-gray-100 p-8 flex-1">
 
-                {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8">
 
                     <div>
@@ -150,7 +146,6 @@ function DonorManagementADm() {
                         </p>
                     </div>
 
-                    {/* Search */}
                     <div className="flex items-center bg-white rounded-lg shadow px-4 py-3 mt-4 md:mt-0 w-full md:w-80">
 
                         <FaSearch className="text-gray-500" />
@@ -166,10 +161,8 @@ function DonorManagementADm() {
                     </div>
                 </div>
 
-                {/* Dashboard Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
 
-                    {/* Total */}
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-600">
                         <h2 className="text-gray-500">
                             Total Donors
@@ -180,7 +173,6 @@ function DonorManagementADm() {
                         </p>
                     </div>
 
-                    {/* Approved */}
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-600">
                         <h2 className="text-gray-500">
                             Approved
@@ -191,7 +183,6 @@ function DonorManagementADm() {
                         </p>
                     </div>
 
-                    {/* Pending */}
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
                         <h2 className="text-gray-500">
                             Pending
@@ -202,7 +193,6 @@ function DonorManagementADm() {
                         </p>
                     </div>
 
-                    {/* Eligible */}
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-600">
                         <h2 className="text-gray-500">
                             Eligible
@@ -213,7 +203,6 @@ function DonorManagementADm() {
                         </p>
                     </div>
 
-                    {/* Blocked */}
                     <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-gray-600">
                         <h2 className="text-gray-500">
                             Blocked
@@ -226,7 +215,6 @@ function DonorManagementADm() {
 
                 </div>
 
-                {/* Donor List */}
                 <div className="space-y-4">
 
                     {loading ? (
@@ -253,7 +241,6 @@ function DonorManagementADm() {
 
                                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
 
-                                    {/* Donor Information */}
                                     <div className="flex items-center gap-4">
 
                                         <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
@@ -300,7 +287,6 @@ function DonorManagementADm() {
                                         </div>
                                     </div>
 
-                                    {/* Donor Status */}
                                     <div className="flex flex-wrap gap-3">
 
                                         <span className="bg-red-100 text-red-600 px-4 py-2 rounded-full font-semibold">
@@ -334,7 +320,6 @@ function DonorManagementADm() {
 
                                     </div>
 
-                                    {/* Actions */}
                                     <div className="flex justify-end w-full lg:w-auto">
 
                                         <div className="flex items-center gap-2">
@@ -350,7 +335,6 @@ function DonorManagementADm() {
                                                 <FaEye />
                                             </button>
 
-                                            {/* Approve */}
                                             {donor.status === "Pending" && (
                                                 <button
                                                     onClick={() =>
@@ -366,7 +350,6 @@ function DonorManagementADm() {
                                                 </button>
                                             )}
 
-                                            {/* Block */}
                                             {donor.status !== "Blocked" && (
                                                 <button
                                                     onClick={() =>
@@ -382,7 +365,6 @@ function DonorManagementADm() {
                                                 </button>
                                             )}
 
-                                            {/* Unblock */}
                                             {donor.status === "Blocked" && (
                                                 <button
                                                     onClick={() =>
@@ -398,7 +380,6 @@ function DonorManagementADm() {
                                                 </button>
                                             )}
 
-                                            {/* Delete */}
                                             <button
                                                 onClick={() =>
                                                     deleteDonor(donor.id)
@@ -423,13 +404,11 @@ function DonorManagementADm() {
 
             </div>
 
-            {/* Donor Profile Modal */}
             {selectedDonor && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 
-                        {/* Modal Header */}
                         <div className="flex justify-between items-center p-6 border-b">
 
                             <div>
@@ -453,7 +432,6 @@ function DonorManagementADm() {
 
                         </div>
 
-                        {/* Profile */}
                         <div className="p-6">
 
                             <div className="flex items-center gap-4 mb-6">
@@ -547,7 +525,6 @@ function DonorManagementADm() {
 
                             </div>
 
-                            {/* Status */}
                             <div className="mt-6 p-4 bg-gray-50 rounded-xl">
 
                                 <p className="text-sm text-gray-500 mb-2">
@@ -570,7 +547,6 @@ function DonorManagementADm() {
 
                             </div>
 
-                            {/* Admin Actions */}
                             <div className="flex flex-wrap gap-3 mt-6">
 
                                 {selectedDonor.status ===
@@ -643,7 +619,7 @@ function DonorManagementADm() {
     );
 }
 
-// Profile item component
+
 function ProfileItem({ label, value }) {
     return (
         <div className="bg-gray-50 rounded-lg p-4">
